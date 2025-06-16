@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线答题</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">在线答题系统</div>
+        <div class="user-info">欢迎您</div>
+    </header>
+
+    <div class="main-container">
+        <div class="questions-container" id="questions-container">
+            <div class="subject-selector-wrapper">
+                <form id="subject-form">
+                    <label for="subject">请选择科目:</label>
+                    <select name="subject" id="subject">
+                        <option value="">--正在加载科目--</option>
+                    </select>
+                </form>
+            </div>
+            <div id="quiz-content">
+                 <div class="empty-state">
+                    <h2>欢迎来到在线答题系统</h2>
+                    <p>请从上方的下拉菜单中选择一个科目开始答题。</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="sidebar-sticky-content">
+                <div class="score-card">
+                    <h3>总分</h3>
+                    <p id="total-score">0</p>
+                </div>
+                <div class="navigation-card">
+                    <h3>题目导航</h3>
+                    <div class="nav-controls">
+                        <label for="nav-type-selector">视图:</label>
+                        <select id="nav-type-selector">
+                            <option value="normal">常规</option>
+                            <option value="categorized">分类</option>
+                        </select>
+                    </div>
+                    <div class="nav-grid-container">
+                        <div class="nav-grid" id="nav-grid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="static/script.js"></script>
+</body>
+</html> 
