@@ -14,16 +14,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function loadSubjects() {
         try {
-            const response = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${DATA_PATH}`);
-            const data = await response.json();
-            const files = data.filter(item => item.name.endsWith('.json'));
+            // No longer using GitHub API, using the self-hosted manifest via JsDelivr
+            const response = await fetch(`https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@latest/${DATA_PATH}/subjects.json`);
+            const subjects = await response.json();
 
             subjectSelector.innerHTML = '<option value="">--请选择一个科目--</option>';
-            files.forEach(file => {
-                const subjectName = file.name.replace('.json', '');
+            subjects.forEach(subject => {
                 const option = document.createElement('option');
-                option.value = file.name;
-                option.textContent = subjectName;
+                option.value = subject.fileName;
+                option.textContent = subject.displayName;
                 subjectSelector.appendChild(option);
             });
         } catch (error) {
