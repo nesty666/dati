@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线答题</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v=version) }}">
+</head>
+<body>
+    <header>
+        <div class="logo">在线答题系统</div>
+        <div class="user-info">欢迎您</div>
+    </header>
+
+    <div class="main-container">
+        <div class="questions-container">
+            <div class="subject-selector-wrapper">
+                <form id="subject-form" method="get">
+                    <label for="subject">请选择科目:</label>
+                    <select name="subject" id="subject" onchange="this.form.submit()">
+                        <option value="">--选择一个科目--</option>
+                        {% for subj in subjects %}
+                            <option value="{{ subj }}" {% if subj == selected_subject %}selected{% endif %}>{{ subj }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+
+            {% if not selected_subject %}
+                <div class="empty-state">
+                    <h2>欢迎来到在线答题系统</h2>
+                    <p>请从上方的下拉菜单中选择一个科目开始答题。</p>
+                </div>
+            {% elif not questions %}
+                <div class="empty-state">
+                    <h2>没有题目</h2>
+                    <p>在 '{{ selected_subject }}' 科目下没有找到题目，请尝试选择其他科目。</p>
+                </div>
+            {% else %}
+                {% for question in questions %}
+                {% set question_index = loop.index %}
+                <div class="question-card" id="question-{{ question_index }}">
+                    <div class="question-header">
+                        <p class="question-title">{{ question_index }}. {{ question.question }}</p>
+                        <span class="question-score" id="score-{{ question_index }}"></span>
+                    </div>
+                    <div class="question-body">
+                        {% if question.type == 'multiple_choice' %}
+                            {% set option_letters = ['A', 'B', 'C', 'D', 'E', 'F'] %}
+                            <ul class="options-list">
+                                {% for option in question.options %}
+                                <li>
+                                    <label>
+                                        <input type="radio" name="question-{{ question_index }}" value="{{ option_letters[loop.index0] }}">
+                                        <span class="option-text">{{ option_letters[loop.index0] }}. {{ option }}</span>
+                                    </label>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        {% elif question.type == 'true_false' %}
+                            <ul class="options-list">
+                                <li>
+                                    <label>
+                                        <input type="radio" name="question-{{ question_index }}" value="true">
+                                        <span class="option-text">正确</span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input type="radio" name="question-{{ question_index }}" value="false">
+                                        <span class="option-text">错误</span>
+                                    </label>
+                                </li>
+                            </ul>
+                        {% elif question.type == 'fill_in' %}
+                            <div class="fill-in-wrapper">
+                                <input type="text" name="question-{{ question_index }}" placeholder="请输入答案">
+                                <button class="submit-fill-in" data-question-index="{{ question_index }}">提交</button>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="question-footer" id="footer-{{ question_index }}" style="display: none;">
+                        <p>正确答案: <span class="correct-answer">{{ question.answer }}</span></p>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="sidebar">
+            <div class="sidebar-sticky-content">
+                <div class="score-card">
+                    <h3>总分</h3>
+                    <p id="total-score">0</p>
+                </div>
+                <div class="navigation-card">
+                    <h3>题目导航</h3>
+                    <div class="nav-controls">
+                        <label for="nav-type-selector">视图:</label>
+                        <select id="nav-type-selector">
+                            <option value="normal">常规</option>
+                            <option value="categorized">分类</option>
+                        </select>
+                    </div>
+                    <div class="nav-grid-container">
+                        <div class="nav-grid" id="nav-grid">
+                            {# This will be populated by JavaScript #}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questionsData = {{ questions|tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='script.js', v=version) }}"></script>
+</body>
+</html> 

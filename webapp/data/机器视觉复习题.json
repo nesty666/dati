@@ -1,0 +1,421 @@
+[
+    {
+        "type": "multiple_choice",
+        "question": "在 OpenCV 中，图像的颜色通道顺序是",
+        "options": [
+            "RGB",
+            "BGR",
+            "GRB",
+            "BRG"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "NumPy中可用于表示无符号整数的数据类型是",
+        "options": [
+            "int8",
+            "uint8",
+            "intp",
+            "float"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "OpenCV用于获取摄像头的函数是",
+        "options": [
+            "imread()",
+            "imshow()",
+            "imwrite()",
+            "VideoCapture()"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "OpenCV用于绘制矩形的函数是",
+        "options": [
+            "line()",
+            "rectangle()",
+            "ellipse()",
+            "polylines()"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "将图像img从BGR色彩空间转换为GRAY色彩空间的函数是",
+        "options": [
+            "cv2.cvtColor(img,cv2.COLOR_BGR2HSV)",
+            "cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)",
+            "cv2.CvtColor(img,cv2.COLOR_BGR2GRAY)",
+            "cv2.CvtColor(img,cv2.COLOR_BGR2HSV)"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "OpenCV用于实现均值滤波的函数是",
+        "options": [
+            "blur()",
+            "boxFilter()",
+            "medianBlur()",
+            "filter2D()"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，可以对直方图进行均衡化的函数是",
+        "options": [
+            "hist()",
+            "calcHist()",
+            "histogram()",
+            "equalizeHist()"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "图像反色变换可以通过以下哪种方式简单实现",
+        "options": [
+            "img = 255 - img",
+            "img = img / 255",
+            "img = img * 255",
+            "img = img + 255"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列关于图像加法运算的说法中错误的是",
+        "options": [
+            "加法运算符+可用于执行图像加法运算",
+            "cv2.add()函数可用于执行图像加法运算",
+            "加法运算符+和cv2.add()函数运算结果相同",
+            "运算结果中像素值不会大于255"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "warpAffine()函数不能实现的图像操作是",
+        "options": [
+            "平移",
+            "旋转",
+            "缩放",
+            "扭曲"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "以下哪个函数用于查找图像中的轮廓",
+        "options": [
+            "cv2.cvtColor()",
+            "cv2.threshold()",
+            "cv2.Canny()",
+            "cv2.findContours()"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，可返回轮廓面积的函数是",
+        "options": [
+            "arcLength()",
+            "contourArea()",
+            "approxPolyDP()",
+            "convexHull()"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，不适用于边缘检测的函数是",
+        "options": [
+            "Laplacian()",
+            "Sobel()",
+            "Canny()",
+            "HoughLines()"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "在OpenCV的绘图函数中，可用于设置绘制填充图形的参数是",
+        "options": [
+            "color",
+            "thickness",
+            "lineType",
+            "shift"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "对于二值图像，腐蚀运算的作用是什么？",
+        "options": [
+            "收缩对象边缘",
+            "扩大对象边缘",
+            "增加噪声",
+            "增强图像对比度"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "使用cv2.inRange()函数提取图像中红色区域的代码如下：\nlower_red = np.array([0, 0, 255])\nupper_red = np.array([0, 0, 255])\nmask = cv2.inRange(image, lower_red, upper_red)\n这段代码有什么问题",
+        "options": [
+            "颜色范围下限和颜色范围上限的值相同，不能提取任何颜色",
+            "颜色范围下限和颜色范围上限的通道顺序应该为 BGR 而不是 RGB",
+            "颜色范围下限和颜色范围上限的通道顺序应该为 HSV 而不是 RGB",
+            "提取了图像中蓝色区域"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "模板匹配中，常用的匹配度量方法不包括",
+        "options": [
+            "平方差匹配",
+            "相关性匹配",
+            "直方图匹配",
+            "归一化相关性匹配"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "图像增强的方法有哪些",
+        "options": [
+            "直方图修正",
+            "图像锐化",
+            "高通滤波",
+            "以上均是"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "哪种类型的图像最适合直方图均衡化？",
+        "options": [
+            "低对比度图像",
+            "高对比度图像",
+            "高清图像",
+            "模糊图像"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "图像形态学操作中的结构元素可以是",
+        "options": [
+            "圆形",
+            "矩形",
+            "十字形",
+            "以上都可以"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列关于图像降噪和滤波的说法，正确的是。",
+        "options": [
+            "降噪必然会导致图像细节丢失",
+            "滤波只能处理灰度图像",
+            "降噪和滤波是完全相同的操作",
+            "中值滤波能有效去除椒盐噪声"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列哪个函数可用于二值图像的形态学操作？",
+        "options": [
+            "cv2.threshold()",
+            "cv2.Canny()",
+            "cv2.erode()",
+            "cv2.matchTemplate()"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "直方图均衡化的主要目的是什么？",
+        "options": [
+            "去除图像模糊",
+            "改善图像的对比度",
+            "缩小图像的大小",
+            "压缩图像的数据"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "cv2.morphologyEx()中MORPH_CLOSE操作的效果是：",
+        "options": [
+            "先膨胀后腐蚀",
+            "先腐蚀后膨胀",
+            "仅闭合小孔洞",
+            "仅断开细线"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "视频车辆检测的核心步骤是：",
+        "options": [
+            "背景差分与运动目标提取",
+            "车牌识别",
+            "车辆颜色分类",
+            "驾驶员行为分析"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "OpenCV中cv2.boundingRect()返回的矩形类型是：",
+        "options": [
+            "旋转矩形",
+            "直边矩形",
+            "圆形包围盒",
+            "椭圆包围盒"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "判断轮廓是否穿过检测线的核心逻辑是：",
+        "options": [
+            "比较轮廓面积与阈值",
+            "检查轮廓中心点y坐标与线y坐标",
+            "计算轮廓周长",
+            "分析轮廓颜色直方图"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "在 OpenCV 中，findContours函数的输入图像必须是：",
+        "options": [
+            "彩色图像",
+            "灰度图像",
+            "二值图像",
+            "浮点型图像"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "以下哪种预处理步骤通常是轮廓检测的必要前提？",
+        "options": [
+            "高斯模糊",
+            "阈值处理或边缘检测",
+            "直方图均衡化",
+            "傅里叶变换"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "true_false",
+        "question": "运动目标的检测方法有帧差法，背景减除法和光流法",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "计算机视觉是指用摄像机和计算机代替人眼，完成对目标的识别、跟踪和检测等视觉任务",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "图像处理的基本过程依次是图像获取、图像预处理、特征提取、高级处理",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "Pillow和OpenCV库中的函数对同一张图像进行色彩分离的结果是一样的",
+        "answer": false
+    },
+    {
+        "type": "true_false",
+        "question": "卷积运算是一种加权求和的过程，可以产生锐化、模糊、轮廓、浮雕等各种滤镜效果",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "代数运算是针对输入图像像素点的计算，是一种逐点计算的计算方式",
+        "answer": false
+    },
+    {
+        "type": "true_false",
+        "question": "灰度分布直方图可以反映灰度级像素的个数和像素点位置",
+        "answer": false
+    },
+    {
+        "type": "true_false",
+        "question": "常见的图像噪声类别有高斯噪声、泊松噪声、椒盐噪声",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "闭运算能实现对图像先腐蚀后膨胀的效果",
+        "answer": false
+    },
+    {
+        "type": "true_false",
+        "question": "模板匹配中，cv2.TM_SQDIFF是以方差结果进行匹配度越高（越相似），结果值越小",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "计算机视觉的目标是让计算机理解和解释图像和视频",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "在RGB图像中，G代表的是蓝色（Blue）",
+        "answer": false
+    },
+    {
+        "type": "true_false",
+        "question": "图像中的像素值是图像信息的最基本组成部分",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "MNIST数据集主要用于手写数字的识别",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "在计算机视觉中，数据增强是为了减少模型的过拟合",
+        "answer": true
+    },
+    {
+        "type": "fill_in",
+        "question": "____算法可用于去除图像中的椒盐噪声。",
+        "answer": "中值滤波"
+    },
+    {
+        "type": "fill_in",
+        "question": "在二值图像中，_____可用于去除小的噪点，___可用于填充孔洞。",
+        "answer": "腐蚀, 膨胀"
+    },
+    {
+        "type": "fill_in",
+        "question": "对于图像的形态学操作，常用的操作包括膨胀、__、开运算和闭运算等。",
+        "answer": "腐蚀"
+    },
+    {
+        "type": "fill_in",
+        "question": "图像分割的常用方法之一是阈值分割，其中，____算法可以自动确定阈值。",
+        "answer": "自适应阈值"
+    },
+    {
+        "type": "fill_in",
+        "question": "在进行形态学操作时，我们通常需要指定一个结构元素，例如矩形核或_____",
+        "answer": "十字形核"
+    }
+] 

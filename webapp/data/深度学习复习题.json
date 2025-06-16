@@ -1,0 +1,277 @@
+[
+    {
+        "type": "multiple_choice",
+        "question": "Keras是一个怎样的深度学习框架",
+        "options": [
+            "基于TensorFlow的高级API",
+            "基于PyTorch的高级API",
+            "一种独立的深度学习框架",
+            "一个集成了多种深度学习框架的工具包"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "在一个神经网络里，知道每一个神经元的权重和偏差是最重要的一步。如果以某种方法知道了神经元准确的权重和偏差，就可以近似任何函数。实现这个最佳的方法是",
+        "options": [
+            "随机赋值，期望它们是正确的",
+            "搜索所有权重和偏差的组合，直到得到最佳值",
+            "赋予一个初始值，通过检查跟最佳值的差值，然后迭代更新权重和偏差",
+            "以上都不正确"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "将训练数据进行分割，设置批块大小的好处有",
+        "options": [
+            "有利于并行计算",
+            "有利于内存装载",
+            "配合小批量随机梯度算法的需要",
+            "以上均是"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "以下关于代码和参数的解释，不正确的是：dataset = dataset.shuffle(1000).batch(32).repeat(20)",
+        "options": [
+            "shuffle方法实现对数据的随机打散，避免模型陷入过拟合",
+            "batch方法设置批块大小，每一批块的样本数量一定是32个",
+            "repeat能实现多个轮次的训练",
+            "调用dataset提供的工具函数会返回新的dataset对象，会覆盖旧的dataset对象"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列哪个神经网络结构会发生权重共享",
+        "options": [
+            "卷积神经网络",
+            "循环神经网络",
+            "连接神经网络",
+            "选项A和B"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "批规范化（BN）是有帮助的，因为",
+        "options": [
+            "在将所有的输入传递到下一层之前对其进行归一化",
+            "它将返回归一化的权重平均值和标准差",
+            "它是一种非常有效的反向传播技术",
+            "它能增加模型的复杂度"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "在神经网络中，以下那些技术可以用于解决过拟合问题",
+        "options": [
+            "Dropout",
+            "正则化",
+            "批规范化",
+            "以上均是"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "对于图像识别问题（比如识别照片中的猫），哪种神经网络模型结构更适合解决这类问题",
+        "options": [
+            "多层感知器",
+            "卷积神经网络",
+            "循环神经网络",
+            "感知器"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "小明在训练深度学习模型时，发现训练集误差不断减少，测试集误差不断增大，以下解决方法正确的是",
+        "options": [
+            "数据增广",
+            "提前停止训练",
+            "添加Dropout",
+            "以上均是"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "以下不是keras中的一部分的是",
+        "options": [
+            "keras.datasets",
+            "keras.models",
+            "keras.layers",
+            "keras.matplotlib"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "输入图片大小为200×200，依次经过一层卷积（kernel size 5×5，padding 1，stride 2），pooling（kernel size 3×3，padding 0，stride 1），又一层卷积（kernel size 3×3，padding 1，stride 1）之后，输出特征图大小为",
+        "options": [
+            "95",
+            "96",
+            "97",
+            "98"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "关于深度学习的描述正确的是",
+        "options": [
+            "深度学习需要输入人工提取的特征",
+            "深度学习模型可用来分类",
+            "目前基于深度学习的图像分类准确率低于人类",
+            "深度学习功能可与人脑媲美"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "分析以下代码片段，MaxPooling2D 层的作用是：from tensorflow.keras.layers import MaxPooling2D...",
+        "options": [
+            "对输入特征图进行平均池化，池化窗口大小为2x2，步长为2，不进行填充",
+            "对输入特征图进行最大池化，池化窗口大小为2x2，步长为2，进行填充以保持输出尺寸与输入相同",
+            "对输入特征图进行最大池化，池化窗口大小为2x2，步长为2，不进行填充",
+            "对输入特征图进行卷积操作，卷积核大小为2x2，步长为2，不进行填充"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列关于卷积神经网络，说法错误的是",
+        "options": [
+            "卷积神经网络可以有多个卷积核，可以不同大小",
+            "卷积层的核心作用是通过滑动窗口提取局部特征",
+            "卷积核权重共享机制使得网络参数数量减少并提升泛化能力",
+            "最大池化（Max Pooling）能防止梯度消失问题"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "关于常用的激活函数及其特性，描述错误的是",
+        "options": [
+            "sigmoid函数可以将实数映射到（0，1）范围内，容易产生梯度消失现象",
+            "tanh函数可以将实数映射到（-1，1）范围内，和sigmoid函数存在线性关系",
+            "relu函数在零点处不可导，可以实现单侧抑制，缓解梯度消失问题",
+            "激活函数的目标是为了提高模型训练的速度"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "为了适配模型，单个测试样本通常需要增加一个维度，对于样本A的操作正确的是",
+        "options": [
+            "tf.expand_dims(A,axis= -1)",
+            "tf.reshape(A,axis= -1)",
+            "tf.squeeze(A,axis= -1)",
+            "tf.stack(A,axis= -1)"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "梯度下降算法的目标是？",
+        "options": [
+            "最大化损失函数",
+            "最小化损失函数",
+            "使损失函数保持不变",
+            "随机改变损失函数的值"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下面这段代码构建的卷积神经网络中，最后一层Dense层通常用于什么任务：from tensorflow.keras.layers import Conv2D...",
+        "options": [
+            "图像的特征提取",
+            "图像的降维",
+            "图像的分类，输出10个类别的概率分布",
+            "图像的上采样，恢复图像分辨率"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "当使用一个 2x2 的池化窗口，步长为 2 对一个4x4的特征图进行最大池化操作时，输出特征图的尺寸是？",
+        "options": [
+            "2x2",
+            "3x3",
+            "4x4",
+            "1x1"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "以下代码中 Flatten 层的功能是： from tensorflow.keras.layers import Flatten...",
+        "options": [
+            "将输入的多维特征图进行卷积操作，使其变为一维向量",
+            "将输入的多维特征图进行池化操作，减少特征图的尺寸",
+            "将输入的多维特征图展平成一维向量，以便后续连接全连接层",
+            "对输入的一维向量进行归一化处理"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "true_false",
+        "question": "在回归任务中，均方误差（MSE）越小表示模型预测越准确",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "模型的参数量越多，其性能一定越好",
+        "answer": false
+    },
+    {
+        "type": "true_false",
+        "question": "在监督学习任务中，输出层中的神经元的数量要和类的数量（其中类的数量大于2）保持一致",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "如果模型训练时使用的学习率太大，可能会导致网络将无法收敛",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "卷积神经网络具有稀疏连接、参数共享和平移不变性三个特性",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "早停（Early Stopping）是一种正则化技术，可防止模型在训练过程中过拟合",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "tf.linalg.matmul()函数可以实现矩阵乘法操作，等价于符号@",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "数据增强（如旋转、缩放图像）会增加训练数据的多样性，缓解过拟合",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "已知input = [0.01,0.01,0.02,0.087,0.02,0.02,0.02,0.01,0.01,0.01], 则tf.math.argmax(input)的结果为4",
+        "answer": false
+    },
+    {
+        "type": "true_false",
+        "question": "在随机梯度下降算法中，每次更新参数使用的数据是一个批块的样本",
+        "answer": false
+    },
+    {
+        "type": "fill_in",
+        "question": "以下神经网络有...层，有...层隐藏层，输入层有...个神经元，输出层有...个神经元，属于...神经网络（神经网络类型）。",
+        "answer": "（请手动填写答案）"
+    }
+] 

@@ -1,0 +1,589 @@
+[
+    {
+        "type": "fill_in",
+        "question": "____的目的在于将隐藏在一大批看似杂乱无章的数据信息集中提炼出来有用的数据。",
+        "answer": "数据分析"
+    },
+    {
+        "type": "fill_in",
+        "question": "____中包含了conda、Python在内的超过180个科学包及其依赖项。",
+        "answer": "Anaconda"
+    },
+    {
+        "type": "fill_in",
+        "question": "Jupyter Notebook是一个支持____代码、数学方程、可视化和Markdown的Web应用程序。",
+        "answer": "实时"
+    },
+    {
+        "type": "true_false",
+        "question": "数据分析是一个有目的地收集和整合数据的过程。",
+        "answer": false
+    },
+    {
+        "type": "true_false",
+        "question": "Python是一门胶水语言，可以轻松地操作其它语言编写的库。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "如果要卸载指定环境中的包，则直接使用remove命令移除即可。",
+        "answer": false
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，用于搭接数据仓库和保证数据质量的是。",
+        "options": [
+            "数据收集",
+            "数据处理",
+            "数据分析",
+            "数据展现"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "关于Anaconda的说法中，下列描述错误的是。",
+        "options": [
+            "Anaconda是一个可以对包和环境进行统一管理的发行版本。",
+            "Anaconda包含了conda、Python在内的超过180个科学包及其依赖项",
+            "Anaconda是完全开源的、付费的",
+            "Anaconda避免了单独安装包时需要配置或兼容等各种问题"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "关于Anaconda的组件中，可以编辑文档且展示数据分析过程的是。",
+        "options": [
+            "Anaconda Navigator",
+            "Anaconda Prompt",
+            "Spyder",
+            "Jupyter Notebook"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下面列出的数据分析库中，用于绘制数组的2D图形的是。",
+        "options": [
+            "NumPy",
+            "Pandas",
+            "Matplotlib",
+            "NLTK"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "fill_in",
+        "question": "在NumPy中，可以使用数组对象________执行一些科学计算。",
+        "answer": "ndarray"
+    },
+    {
+        "type": "fill_in",
+        "question": "如果ndarray.ndim执行的结果为2，则表示创建的是____维数组。",
+        "answer": "二"
+    },
+    {
+        "type": "fill_in",
+        "question": "NumPy的数据类型是由一个类型名和元素____字节数____的数字组成。",
+        "answer": "位,长"
+    },
+    {
+        "type": "fill_in",
+        "question": "如果两个数组的大小（ndarray.shape）不同，则它们进行算术运算时会出现____机制。",
+        "answer": "广播"
+    },
+    {
+        "type": "fill_in",
+        "question": "花式索引是NumPy的一个术语，是指用整数________进行索引。",
+        "answer": "数组或列表"
+    },
+    {
+        "type": "true_false",
+        "question": "通过empty()函数创建的数组，该数组中没有任何的元素。",
+        "answer": false
+    },
+    {
+        "type": "true_false",
+        "question": "如果没有明确地指明数组中元素的类型，则默认为float64。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "数组之间的任何算术运算都会将运算应用到元素级。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "多维数组操作索引时，可以将切片与整数索引混合使用。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "当通过布尔数组索引操作数组时，返回的数据是布尔数组中False对应位置的值。",
+        "answer": false
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，用来表示数组维度的属性是。",
+        "options": [
+            "ndim",
+            "Shape",
+            "size",
+            "dtype"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下面代码中，创建的是一个3行3列数组的是。",
+        "options": [
+            "arr = np.array([1, 2, 3])",
+            "arr = np.array([[1, 2, 3], [4, 5, 6]])",
+            "arr = np.array([[1, 2], [3, 4]])",
+            "np.ones((3, 3))"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "请阅读下面一段程序：\narr_2d = np.array([[11, 20, 13],[14, 25, 16],[27, 18, 9]])\nprint(arr_2d[1, :1])\n执行上述程序后，最终输出的结果为。",
+        "options": [
+            "[14]",
+            "[25]",
+            "[14, 25]",
+            "[20, 25]"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "请阅读下面一段程序：\narr = np.arange(6).reshape(1, 2, 3)\nprint(arr.transpose(2, 0, 1))\n执行上述程序后，最终输出的结果为。",
+        "options": [
+            "[[[2 5]]\n[[0 3]]\n[[1 4]]]",
+            "[[[1 4]]\n[[0 3]]\n[[2 5]]]",
+            "[[[0 3]]\n[[1 4]]\n[[2 5]]]",
+            "[[[0]\n[3]]\n[[1]\n[4]]\n[[2]\n[5]]]"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列函数或方法中，用来表示矢量化三元表达式的是。",
+        "options": [
+            "where()",
+            "cumsum()",
+            "sort()",
+            "unique()"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "fill_in",
+        "question": "Pandas是一个基于____的Python库。",
+        "answer": "Numpy"
+    },
+    {
+        "type": "fill_in",
+        "question": "Pandas中有两个主要的数据结构分别为____和____。",
+        "answer": "Series, DataFrame"
+    },
+    {
+        "type": "fill_in",
+        "question": "Series结构由____和____组成。",
+        "answer": "索引, 数据"
+    },
+    {
+        "type": "fill_in",
+        "question": "可以使用____和____创建一个Series对象。",
+        "answer": "列表, 字典"
+    },
+    {
+        "type": "fill_in",
+        "question": "数据排序可以分为____和____。",
+        "answer": "按值排列, 按索引排列"
+    },
+    {
+        "type": "true_false",
+        "question": "在DataFrame中每列的数据都可以看做是一个Series对象。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "使用describe()方法会输出多个统计指标。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "from_arrays()方法是将元组列表转换为MultiIndex对象。",
+        "answer": false
+    },
+    {
+        "type": "true_false",
+        "question": "read_csv()函数和read_table()函数没有区别可以随意替换使用。",
+        "answer": false
+    },
+    {
+        "type": "true_false",
+        "question": "Series对象不存在层次化索引。",
+        "answer": false
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，描述不正确的是。",
+        "options": [
+            "Pandas中只有Series和DataFrame这两种数据结构",
+            "Series是一维的数据结构",
+            "DataFrame是二维的数据结构",
+            "Series和DataFrame都可以重置索引"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，描述正确是。",
+        "options": [
+            "Series是一维数据结构，其索引在右，数据在左",
+            "DataFrame是二维数据结构，并且该结构具有行索引和列索引",
+            "Series结构中的数据不可以进行算术运算",
+            "sort_values()方法可以将Series或DataFrame中的数据按照索引排序"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列方法中，可以将元组转换为MultiIndex对象的是。",
+        "options": [
+            "from_tuples()",
+            "from_arrays()",
+            "from_product()",
+            "from_list()"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，哪个方法可以一次性输出多个统计指标。",
+        "options": [
+            "describe()",
+            "mean()",
+            "median()",
+            "sum()"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "请阅读下面一段程序：\nimport pandas as pd\nser_obj = pd.Series(range(1, 6), index=[5, 3, 0, 4, 2])\nser_obj.sort_index()\n执行上述程序后，最终输出的结果为。",
+        "options": [
+            "5 1\n3 2\n0 3\n4 4\n2 5",
+            "0 3\n2 5\n3 2\n4 4\n5 1",
+            "5 1\n4 4\n3 2\n2 5\n0 3",
+            "2 5\n4 4\n0 3\n3 2\n5 1"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "fill_in",
+        "question": "数据清洗的目的是让数据具有____、____、____、____、____、等特点。",
+        "answer": "完整性, 唯一性, 权威性, 合法性, 一致性"
+    },
+    {
+        "type": "fill_in",
+        "question": "产生缺失值或空值的原因有____和____。",
+        "answer": "人为原因, 机械原因"
+    },
+    {
+        "type": "fill_in",
+        "question": "拉依达原则在检测异常值时必须保证数据遵守____。",
+        "answer": "正态分布"
+    },
+    {
+        "type": "true_false",
+        "question": "rename()方法可以重命名索引名。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "drop_duplicated()方法可以删除重复值。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "在箱形图中超出上界和下界的值称为异常值。",
+        "answer": true
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，描述不正确的是。",
+        "options": [
+            "数据清洗的目的是为了提高数据质量",
+            "异常值一定要删除",
+            "可使用drop_duplicates()方法删除重复数据",
+            "concat()函数可以沿着一条轴将多个对象进行堆叠"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "请阅读下面一段程序：\nfrom pandas import Series\nimport pandas as pd\nfrom numpy import NaN\nseries_obj = Series([None, 4, NaN])\npd.isnull(series_obj)\n执行上述程序后，最终输出的结果为。",
+        "options": [
+            "0 True\n1 False\n2 True",
+            "0 True\n1 True\n2 False",
+            "0 False\n1 True\n2 True",
+            "0 True\n1 True\n2 True"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，可以删除缺失值或空值的是。",
+        "options": [
+            "isnull()",
+            "notnull()",
+            "dropna()",
+            "fillna()"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "请阅读下面一段程序：\nimport numpy as np\nimport pandas as pd\nser_obj = pd.Series([4, np.nan, 6, 5, -3, 2])\nser_obj.sort_values()\n执行上述程序后，最终输出的结果为。",
+        "options": [
+            "4 -3.0\n5 2.0\n0 4.0\n3 5.0\n2 6.0\n1 NaN",
+            "1 NaN\n2 6.0\n3 5.0\n0 4.0\n5 2.0\n4 -3.0",
+            "5 2.0\n0 4.0\n3 5.0\n2 6.0\n4 -3.0\n1 NaN",
+            "0 4.0\n1 NaN\n2 6.0\n3 5.0\n4 -3.0\n5 2.0"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "fill_in",
+        "question": "分组聚合的流程分为____、____、____。",
+        "answer": "拆分, 应用, 合并"
+    },
+    {
+        "type": "fill_in",
+        "question": "分组键的形式可以有____、____、____、____。",
+        "answer": "列名, 列表或数组, 字典, 函数"
+    },
+    {
+        "type": "fill_in",
+        "question": "transform()方法会对产生的标量值进行____操作。",
+        "answer": "广播"
+    },
+    {
+        "type": "fill_in",
+        "question": "当对一个DataFrame对象进行分组后会返回一个____对象。",
+        "answer": "DataFrameGroupBy"
+    },
+    {
+        "type": "true_false",
+        "question": "分组聚合的原理一般分为拆分-应用-合并。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "只要使用groupby()方法分组就会产生一个DataFrameGroupby对象。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "使用agg()方法进行聚合运算会对产生的标量值进行广播。",
+        "answer": false
+    },
+    {
+        "type": "true_false",
+        "question": "使用transform()方法进行聚合运算，其结果可以保持与原数据形状相同。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "apply()方法可以使用广播功能。",
+        "answer": true
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于groupby()方法说法不正确的是。",
+        "options": [
+            "分组键可以是列表或数组，但长度不需要与待分组轴的长度相同",
+            "可以通过DataFrame中的列名的值进行分组",
+            "可以使用函数进行分组",
+            "可使用series或字典分组"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "fill_in",
+        "question": "数据可视化常见的统计图表有____、____、____。（写出3个即可）",
+        "answer": "柱状图, 折线图, 饼图"
+    },
+    {
+        "type": "fill_in",
+        "question": "在使用Matplotlib绘制图表时，需要导入____模块。",
+        "answer": "matplotlib.pyplot"
+    },
+    {
+        "type": "fill_in",
+        "question": "在直方图中一般使用横轴表示____，用纵轴表示____。",
+        "answer": "数据的类型, 分布情况"
+    },
+    {
+        "type": "fill_in",
+        "question": "在使用Matplotlib绘制柱状图时可以使用pyplot模块中的____函数。",
+        "answer": "bar"
+    },
+    {
+        "type": "true_false",
+        "question": "seaborn是基于Matplotlib核心库。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "Figure对象可以划分多个绘图区域，每个绘图区域都是一个Axes对象。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "绘制图表时，可以使用subplot()函数创建多个子图。",
+        "answer": false
+    },
+    {
+        "type": "true_false",
+        "question": "Matplotlib默认支持中文显示。",
+        "answer": false
+    },
+    {
+        "type": "true_false",
+        "question": "Matplotlib生成的图表可以保存在本地。",
+        "answer": true
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于Matplotlib库说法不正确是。",
+        "options": [
+            "Matplotlib是一个Python 3D绘图库",
+            "可输出PNG、PDF等格式",
+            "渐进、交互的方式实现数据可视化",
+            "使用简单"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，不属于Seaborn库的特点是。",
+        "options": [
+            "Seaborn是基于Matplotlib的可视化库",
+            "基于网格绘制出更加复杂的图像集合",
+            "多个内置主题及颜色主题",
+            "可以处理大量的数据流"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列函数中，可以绘制散点图的函数是。",
+        "options": [
+            "hist()",
+            "scatter()",
+            "bar()",
+            "pie()"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，描述不正确的是。",
+        "options": [
+            "箱形图可以提供有关数据分散情况的信息，可以很直观地查看数据的四分位分布",
+            "折线图是用直线段将数据连接起来而组成的图形，以折线的方式显式数据的变化",
+            "饼图显示一个数据序列中的各项的大小与各项总和的比例",
+            "条形图是由一系列高度不等的纵向条纹或线段表示数据分布情况"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "fill_in",
+        "question": "____是指多个时间点上形成的数值序列。",
+        "answer": "时间序列"
+    },
+    {
+        "type": "fill_in",
+        "question": "ARIMA模型是一种用于时间序列____的常见统计模型。",
+        "answer": "预测"
+    },
+    {
+        "type": "fill_in",
+        "question": "____是指将时间序列从一个频率转换到另一个频率的处理过程。",
+        "answer": "重采样"
+    },
+    {
+        "type": "fill_in",
+        "question": "在Pandas中，使用____类表示一个标准的时间段或时期。",
+        "answer": "Period"
+    },
+    {
+        "type": "true_false",
+        "question": "最基本的时间序列类型是以时间戳为索引的Series对象。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "如果相同频率的两个Period对象进行数学运算，那么计算结果为它们的单位数量。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "任何类型的Pandas对象都可以进行重采样。",
+        "answer": false
+    },
+    {
+        "type": "true_false",
+        "question": "DatetimeIndex是一种用来指代一系列时间戳的索引结构。",
+        "answer": true
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，不可以用做Pandas对象索引的是。",
+        "options": [
+            "Period",
+            "DatetimeIndex",
+            "PeriodIndex",
+            "MultiIndex"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "请阅读下面一段程序：\nimport pandas as pd\nperiod1 = pd.Period('2015/6/1')\nprint(period1 + 50)\n执行上述程序，最终输出的结果为。",
+        "options": [
+            "2015-07-18",
+            "2015-07-19",
+            "2015-07-20",
+            "2015-07-21"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "请阅读下面一段程序：\nimport pandas as pd\nimport numpy as np\ndate_index = pd.date_range(start=\"2018/08/10\", periods=5)\ndate_se = pd.Series(np.arange(5), index=date_index)\nsorted_se = date_se.sort_index()\nprint(sorted_se.truncate(after='2018-8-11'))\n执行上述程序，最终输出的结果为。",
+        "options": [
+            "2018-08-12 2\n2018-08-13 3",
+            "2018-08-12 2\n2018-08-13 3\n2018-08-14 4",
+            "2018-08-10 0\n2018-08-11 1\n2018-08-12 2",
+            "2018-08-10 0\n2018-08-11 1"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列函数中，用于创建固定频率DatetimeIndex对象的是。",
+        "options": [
+            "shift()",
+            "date_range()",
+            "period_range()",
+            "asfreq()"
+        ],
+        "answer": "B"
+    }
+] 

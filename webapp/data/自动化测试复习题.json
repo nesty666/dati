@@ -1,0 +1,519 @@
+[
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，不属于Select类封装下拉选择框的方法的是。",
+        "options": [
+            "select_by_index(index)",
+            "select_by_value(value)",
+            "select_by_visible_text(text)",
+            "select_by_text(text)"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于元素等待的描述正确的是。",
+        "options": [
+            "设置隐式等待调用的方法是WebDriverWait()",
+            "显式等待通常结合until()方法或until_not()方法使用",
+            "显式等待抛出的异常是NoSuchElementException",
+            "强制等待3秒可以写成sleep 3"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于截图操作的方法描述错误的是。",
+        "options": [
+            "在driver.get_screenshot_as_file(filename)方法中，参数filename是图片的相对路径",
+            "使用driver.save_screenshot()方法，截图会默认保存在项目的根目录中",
+            "driver.get_screenshot_as_base64()方法表示获取当前页面的base64编码字符串",
+            "driver.get_screenshot_as_png()方法表示获取当前页面的二进制文件数据"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于弹出框操作的描述错误的是。",
+        "options": [
+            "通过text属性能够获取弹出框的文本信息",
+            "调用accept()方法表示接受弹出框信息",
+            "调用send_keys()方法能够对所有的弹出框输入信息",
+            "在Selenium WebDriver中，输入框、提示框与确认框都是Alert类的对象"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，属于获取指定Cookie的方法的是。",
+        "options": [
+            "add_cookie()",
+            "get_cookies()",
+            "delete_cookie()",
+            "get_cookie(name)"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于文件的上传和下载说法正确的是。",
+        "options": [
+            "通过调用元素定位方法和send_keys()方法不能测试文件的上传",
+            "第三方工具AutoIt可以协助Selenium完成Web自动化测试过程中的窗口操作部分",
+            "Selenium WebDriver直接提供了测试文件的下载的方法",
+            "AutoIt工具不能测试文件的下载"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于pytest框架说法正确的是。",
+        "options": [
+            "可以运行部分测试用例",
+            "不支持重复运行失败的测试用例",
+            "支持由unittest编写的测试用例",
+            "不可以跳过执行函数"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于pytest断言表达式与说明错误的是。",
+        "options": [
+            "assert a in b判断a是否包含b",
+            "assert a判断a是否为真",
+            "assert a not in b判断b是否不包含a",
+            "assert a != b判断a不等于b"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，不属于unittest框架核心要素的是。",
+        "options": [
+            "TestSuite",
+            "TestRunner",
+            "Fixture",
+            "TestPath"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于pytest框架中的Fixture说法错误的是。",
+        "options": [
+            "Fixture的函数级别在整个模块运行中只执行一次，作用于模块中的测试用例",
+            "Fixture的类级别指的是在模块或类中定义setup_class()方法与teardown_class()方法",
+            "Fixture的模块级别是在模块中定义setup_function()方法与teardown_function()方法",
+            "Fixture的方法级别指的是在类中定义setup_method()方法或setup()方法"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于TestCase说法正确的是。",
+        "options": [
+            "TestCase是运行测试用例",
+            "TestCase是测试套件",
+            "TestCase是测试执行器",
+            "TestCase是测试用例"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，不属于基本元素定位的方式的是。",
+        "options": [
+            "id定位",
+            "text定位",
+            "name定位",
+            "css定位"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于xpath层级与属性的描述错误的是。",
+        "options": [
+            "子元素可以使用属性",
+            "父元素可以使用属性",
+            "只有子元素可以使用属性",
+            "父元素和子元素都可以使用属性"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，css定位元素属性选择器写法正确的是。",
+        "options": [
+            "[@id=\"id\"]",
+            "[#id=\"id\"]",
+            "[id=\"id\"]",
+            "input[@id=\"id\"]"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，属于鼠标操作的方法的是。",
+        "options": [
+            "context_click()",
+            "set_window_size()",
+            "set_window_position()",
+            "find_element()"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于常用的键盘操作方法的描述错误的是。",
+        "options": [
+            "send_keys(Keys.ENTER)表示回车键",
+            "send_keys(Keys.'a')表示全选",
+            "send_keys(Keys.SPACE)表示空格键",
+            "send_keys（Keys.BACK_SPACE）表示删除键"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于xpath定位元素的写法与说明正确的是。",
+        "options": [
+            "//[class='username']表示定位class属性值为username的元素",
+            "//input[id='username']表示定位id属性值为username的元素",
+            "//[@name='username']表示定位name属性值为username的元素",
+            "//input[@name='username']表示定位name属性值为username的元素"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于PO模式的优缺点说法正确的是。",
+        "options": [
+            "使用 PO模式的测试代码结构相对简单",
+            "能够提高代码的可读性和可维护性",
+            "在自动化测试中必须使用PO模式",
+            "使用PO模式并不能将程序中重复的代码抽取出来"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于PO模式的描述错误的是。",
+        "options": [
+            "对象库层用于封装对元素操作的方法",
+            "业务层用于封装将一个或多个元素操作组合起来完成一个业务功能的方法",
+            "PO模式可以分为对象库层、操作层和业务层",
+            "操作层用于封装对元素进行操作的方法"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于数据驱动的描述错误的是。",
+        "options": [
+            "可以利用同样的过程对不同的数据输入进行测试",
+            "可以把数据驱动理解为一种模式或者一种思想",
+            "数据驱动只能读取JSON和XLS或XLSX格式的文件",
+            "数据驱动本身不是一个工业级标准的概念"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于测试数据的来源说法正确的是。",
+        "options": [
+            "不可以从数据库中读取数据",
+            "不可以直接调用接口获取数据源",
+            "从文件读取数据，如JSON、YAML等格式的文件",
+            "直接定义在测试脚本中"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于DDT的描述错误的是。",
+        "options": [
+            "DDT是指数据驱动测试",
+            "@data用来装饰方法",
+            "在unittest框架中可以结合DDT也能实现数据驱动",
+            "@unpack用来装饰类"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，不属于自动化测试优点的是。",
+        "options": [
+            "提高回归测试效率",
+            "提高人员利用率",
+            "能够发现很多缺陷",
+            "提高测试精确度"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，属于测试Web项目的UI自动化测试工具是。",
+        "options": [
+            "Postman",
+            "Selenium",
+            "Appium",
+            "JMeter"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，不属于自动化测试基本流程的是。",
+        "options": [
+            "制定测试计划",
+            "修改软件缺陷",
+            "分析测试需求",
+            "编写测试脚本"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于自动化测试的说法错误的是。",
+        "options": [
+            "项目周期长且界面稳定时适合开展自动化测试",
+            "项目需求变动频繁时适合开展自动化测试",
+            "项目需要投入大量时间与人力测试时适合开展自动化测试",
+            "项目需要在多平台上重复运行相同测试脚本时适合开展自动化测试"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，属于手机通知栏操作方法的是。",
+        "options": [
+            "driver.notifications()",
+            "driver.open_notifications()",
+            "driver.get_notifications()",
+            "driver.send_notifications()"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于Toast消息处理的说法错误的是。",
+        "options": [
+            "Toast是App中常见的一种弹窗",
+            "Toast弹窗一般显示的时间不会很长",
+            "Toast弹窗有确认或取消按钮",
+            "通过自动化测试可以获取Toast弹窗中的文字"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于TouchAction(driver).tap(x=None,y=None).perform()方法的说明正确的是。",
+        "options": [
+            "该方法用于实现滑动操作",
+            "该方法用于实现抬起操作",
+            "该方法用于实现移动操作",
+            "该方法用于实现轻敲操作"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于adb命令的说明错误的是。",
+        "options": [
+            "adb shell dumpsys | findstr mFocusedApp表示获取App的包名和界面名",
+            "adb install 文件路径表示安装apk文件",
+            "adb connect IP地址表示连接某个设备",
+            "adb shell表示进入安卓手机内部的Linux系统命令行中"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，属于手机屏幕截图方法的是。",
+        "options": [
+            "driver.get_screen(filename)",
+            "driver.get_screenshot(filename)",
+            "driver.get_screenshot_as_file(filename)",
+            "driver.screen_as_file(filename)"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，属于获取手机网络属性的是。",
+        "options": [
+            "driver.get_network_connection",
+            "driver.network_connection",
+            "driver.set_network_connection",
+            "driver.network"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，属于日志器对应的类名的是。",
+        "options": [
+            "Handler",
+            "Filter",
+            "Logger",
+            "Formatter"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于日志的描述错误的是。",
+        "options": [
+            "表示调试级别的日志是DEBUG",
+            "日志只能用于调试代码",
+            "日志可以分析用户行为",
+            "可以使用过滤器输出重要级别的日志信息"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，属于logging模块中默认的日志级别的是。",
+        "options": [
+            "DEBUG",
+            "INFO",
+            "ERROR",
+            "WARNING"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于设置日志格式的说法错误的是。",
+        "options": [
+            "使用%(module)s能够查看日志输出函数的模块名",
+            "使用%(asctime)s能够精确输出毫秒的日志",
+            "使用%(lineno)d能够输出日志函数语句在程序中的行数",
+            "使用%(filename)s能够输出日志的完整路径名"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "下列选项中，关于日志的四大组件的说法错误的是。",
+        "options": [
+            "日志器需要通过过滤器将日志信息输出到目标位置",
+            "日志器可以设置多个处理器将同一条日志记录输出到不同的位置",
+            "每个处理器可以设置一个格式器，实现同一条日志以不同的格式输出到不同的位置",
+            "不同的处理器可以将日志输出到不同的位置"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "true_false",
+        "question": "自动化测试可以完全代替人工测试。",
+        "answer": false
+    },
+    {
+        "type": "true_false",
+        "question": "自动化测试的基本流程与传统的人工测试基本流程一样。",
+        "answer": false
+    },
+    {
+        "type": "true_false",
+        "question": "从项目运行的角度，自动化测试可分为Web自动化测试和App自动化测试。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "Selenium测试工具可用来测试Web项目。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "自动化测试找出的缺陷（Bug）一定比人工测试要多。",
+        "answer": false
+    },
+    {
+        "type": "true_false",
+        "question": "JMeter测试工具既可以用于进行性能测试也可以用于进行接口测试。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "partial link text可以通过超链接文本的一部分文本内容来定位元素。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "xpath只能通过元素的相对路径进行定位。",
+        "answer": false
+    },
+    {
+        "type": "true_false",
+        "question": "perform()方法表示执行所有ActionChains类中存储的鼠标操作行为。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "根据下拉选择框的索引值来定位时，第一个索引的顺序是从1开始。",
+        "answer": false
+    },
+    {
+        "type": "true_false",
+        "question": "获取弹出框的文本信息可以调用Alert类的属性text。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "press_keycode()方法是以传入键值的形式来模拟手机键盘操作。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "调用swipe()滑动操作的方法时具有一定的惯性。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "在调用swipe()方法时，如果滑动的时间足够长，效果与drag_and_drop()拖曳操作的方法一样。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "pytest框架能够与Selenium、Appium等工具结合使用。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "@pytest.mark.skipif装饰器可以跳过测试用例中的函数。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "在使用unittest框架时，通过使用@pytest.mark.parametrzie()装饰器实现参数化。",
+        "answer": false
+    },
+    {
+        "type": "true_false",
+        "question": "PO模式与传统模式相比，使用PO模式可以提高代码的复用性。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "使用PO模式可以降低程序的维护成本。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "在程序中使用PO模式时，测试用例与页面对象不是分离的状态。",
+        "answer": false
+    },
+    {
+        "type": "true_false",
+        "question": "数据驱动的优点之一是代码的复用率高。",
+        "answer": true
+    },
+    {
+        "type": "true_false",
+        "question": "数据驱动的代码可维护性高。",
+        "answer": true
+    }
+] 

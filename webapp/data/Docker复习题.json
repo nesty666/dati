@@ -1,0 +1,244 @@
+[
+    {
+        "type": "multiple_choice",
+        "question": "有关Docker的叙述中，正确的是。",
+        "options": [
+            "Docker不能将应用程序发布到云端进行部署。",
+            "Docker将应用程序及其依赖打包到一个可移植的镜像中。",
+            "Docker操作容器时必须关心容器中有什么软件。",
+            "容器依赖于主机操作系统的内核版本，因而Docker局限于操作系统平台。"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "以下关于docker命令的基本用法的说法中，不正确的。",
+        "options": [
+            "短格式的单字符选项可以组合在一起使用。",
+            "使用布尔值选项时不赋值，Docker将选项值视为false。",
+            "多值选项可以在单个命令行中多次定义。",
+            "对于较长的单行命令可以使用续行符进行换行。"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "以下镜像名称中，完整的表示是。",
+        "options": [
+            "myregistryhost/fedora/httpd:version1.0。",
+            "myregistryhost:5000/httpd:version1.0。",
+            "myregistryhost:5000/fedora/httpd。",
+            "myregistryhost:5000/fedora/httpd:version1.0。"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "关于Docker容器操作，正确的说法是。",
+        "options": [
+            "使用不带任何选项的docker ps命令可以列出本地主机上的全部容器。",
+            "使用docker rm -f命令删除正在运行的容器。",
+            "使用docker start命令可以创建并启动一个新的容器。",
+            "使用docker attach命令可以连接未运行的容器。"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "以下关于Dockerfile指令的说法中，不正确的是。",
+        "options": [
+            "FROM可以在同一个Dockerfile文件中多次出现，以创建多个镜像层。",
+            "RUN指令将在当前镜像顶部创建新的层，在其中执行所定义的命令并提交结果。",
+            "COPY和ADD指令的源都不可以是压缩包。",
+            "CMD用来指示docker run命令运行镜像时要执行的命令。"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "从软件开发与运维的角度看，容器对应的阶段是。",
+        "options": [
+            "软件部署与运维",
+            "软件交付",
+            "软件开发",
+            "软件调试"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "不同Docker主机上运行的容器之间需要通信，应选择。",
+        "options": [
+            "用户自定义桥接网络",
+            "overlay网络",
+            "macvlan网络",
+            "host网络"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "容器之间直接交流非常频繁，应选择的网络模式是。",
+        "options": [
+            "host模式",
+            "bridge模式",
+            "none模式",
+            "container模式"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "以下关于端口映射的说法中，不正确的是。",
+        "options": [
+            "使用-P选项可以发布所有暴露的端口，要发布的端口必须提前暴露出来。",
+            "使用-p选项发布特定端口，发布的端口不必提前暴露出来。",
+            "使用-p 主机端口:容器端口将映射主机上所有网络接口的地址。",
+            "使用-p选项不可以同时发布TCP和UDP端口。"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "以下关于卷的说法中，不正确的是。",
+        "options": [
+            "同一个卷可以由多个容器挂载。",
+            "删除容器时会同时删除其匿名卷。",
+            "将一个空白卷挂载到容器中已包含文件的目录中，则这些文件会被复制到卷中。",
+            "启动带有卷的容器时，如果卷不存在，则Docker会自动创建该卷。"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "以下关于绑定挂载的说法中，不正确的是。",
+        "options": [
+            "绑定挂载目标可以使用pwd命令表示容器的当前目录。",
+            "绑定挂载文件可以用于主机与容器之间共享配置文件。",
+            "需要挂载的目录可以由主机上的绝对路径或相对路径引用。",
+            "无论主机上的目录是否为空，绑定挂载到容器中的非空目录都会发生被遮盖的情况。"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "以下关于挂载操作的说法中，正确的是。",
+        "options": [
+            "Docker支持在容器中使用相对路径的挂载点目录。",
+            "使用docker run命令时-v选项可以将所有选项组合在一个字段中。",
+            "使用docker run命令时--mount选项采用若干键值对的写法，但同一个键只能用一次。",
+            "对于tmpfs挂载，使用docker run命令时只可以使用--tmpfs选项。"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "关于运行时选项覆盖Dockerfile指令，不正确的说法是。",
+        "options": [
+            "Dockerfile声明ENTRYPOINT指令，则容器运行时指定的命令均作为参数追加到ENTRYPOINT指令中。",
+            "–entrypoint运行时选项设置会覆盖镜像的Dockerfile中的ENTRYPOINT指令设置。",
+            "–expose运行时选项会覆盖Dockerfile的EXPOSE指令所定义的端口。",
+            " -e运行时选项设置的环境变量可以覆盖默认环境变量或Dockerfile中使用ENV指令定义的环境变量。"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "Dockerfile文件中使用HEALTHCHECK指令声明健康检测配置，其中CMD指令后面的命令执行完毕返回的值表示容器健康且可用的是。",
+        "options": [
+            "0",
+            "1",
+            "2",
+            "-1"
+        ],
+        "answer": "A"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "关于容器所用内存资源的限制，不正确的说法是。",
+        "options": [
+            "用户内存同时设置内存和交换空间。",
+            "在用户内存限制的基础上限制内核内存。",
+            "内存预留可以保证不会超过限制。",
+            "内存\"硬\"限制仅允许容器使用不超过给定数量的用户内存或系统内存。"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "以下关于容器日志的说法中，不正确的是。",
+        "options": [
+            "将容器日志发送到STDOUT和STDERR是Docker的默认日志行为。",
+            "Docker默认的日志驱动是json-file。",
+            "如果以后台方式运行容器，则不能直接看到输出的日志。",
+            "Logspout可以用来捕获容器中的所有日志。"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "以下关于容器监控的说法中，不正确的是。",
+        "options": [
+            "可以使用docker top命令查看容器中正在运行的进程的信息。",
+            "可以使用docker stats命令实时查看容器的系统资源使用情况。",
+            "cAdvisor只监控容器，不能监控运行容器的主机。",
+            "Weave Scope能够进行跨主机监控。"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "Docker Compose可在单主机上建立多个隔离环境，以下说法不正确的是。",
+        "options": [
+            "Docker Compose使用项目名称隔离环境。",
+            "在开发主机上可以用Docker Compose创建单个环境的多个副本。",
+            "为防止构建互相干扰，可以将项目名称设置为唯一的构建编号。",
+            "在共享主机无法防止可能使用相同服务名称的不同项目之间的相互干扰。"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "以下关于docker-compose up命令的说法中，不正确的是。",
+        "options": [
+            "–build选项表示在启动容器之前构建镜像。",
+            "如果服务的容器已经存在，服务的配置在创建后被改变，则该命令会停止并重新创建容器，而且并不保留所挂载的卷。",
+            "–remove-orphans选项用于移除Compose文件中未定义的服务容器。",
+            "该命令会聚合其中每个容器的输出，而且默认将所有输出重定向到控制台。"
+        ],
+        "answer": "B"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "默认情况下，执行docker-compose down命令不会同时删除。",
+        "options": [
+            "Compose文件中定义的服务的容器",
+            "Compose文件中networks节所定义的网络",
+            "服务容器挂载的卷",
+            "所使用的默认网络"
+        ],
+        "answer": "C"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "Compose文件中服务定义时volumes键的定义可以使用短格式，以下键值表示不正确的是。",
+        "options": [
+            "- ./cache:/tmp/cache",
+            "- /opt/data:/var/lib/mysql",
+            "- ~/configs:/etc/configs/:ro",
+            "- :/var/lib/mysql"
+        ],
+        "answer": "D"
+    },
+    {
+        "type": "multiple_choice",
+        "question": "以下文件中，Docker Compose默认读取的是。",
+        "options": [
+            "docker-compose.yml",
+            "docker-compose.override",
+            "docker-compose.prod.yml",
+            "docker-compose.devl"
+        ],
+        "answer": "A"
+    }
+] 
