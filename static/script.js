@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const GITHUB_USER = 'nesty666'; 
-    const GITHUB_REPO = '-'; // Or your new repo name like 'dati'
-    const DATA_PATH = 'webapp/data';
+    const GITHUB_REPO = 'dati';
+    const DATA_PATH = 'data';
 
     const subjectSelector = document.getElementById('subject');
     const quizContent = document.getElementById('quiz-content');
