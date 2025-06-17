@@ -1,4 +1,15 @@
 document.addEventListener('DOMContentLoaded', async () => {
+    console.log("DOM fully loaded and parsed. Initializing script.");
+
+    // Critical: Check if the OpenAI library loaded successfully.
+    if (typeof OpenAI === 'undefined') {
+        const errorMsg = "致命错误：核心AI库 (OpenAI.js) 加载失败。请检查网络连接或浏览器插件是否阻止了 cdn.jsdelivr.net 的脚本。";
+        console.error(errorMsg);
+        alert(errorMsg);
+        return; // Stop execution if the library is missing.
+    }
+    console.log("OpenAI library loaded successfully.");
+
     const GITHUB_USER = 'nesty666'; 
     const GITHUB_REPO = 'dati';
     const DATA_PATH = 'data';
@@ -20,6 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let totalScore = 0;
     const questionScores = {};
     let userApiKey = sessionStorage.getItem('deepseek_api_key') || '';
+    console.log(`Initial API Key found in session storage: ${userApiKey ? 'Yes' : 'No'}`);
 
     if (userApiKey) {
         apiKeyInput.value = userApiKey;
@@ -187,6 +199,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     quizContent.addEventListener('click', (e) => {
         const target = e.target;
+        console.log("Click event detected on quiz content. Target:", target);
+
         if (target.classList.contains('submit-fill-in')) {
             const questionNum = parseInt(target.dataset.questionIndex, 10);
             if (isNaN(questionNum)) return;
@@ -203,46 +217,54 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             handleAnswer(questionIndex, isCorrect, userAnswer);
         } else if (target.classList.contains('btn-ai-explain')) {
-            // NEW SIMPLIFIED LOGIC: Check for API Key ON CLICK
+            console.log("AI Explain button clicked.");
+            
             if (!userApiKey) {
+                console.log("API Key not found. Alerting user and opening modal.");
                 alert('请先在右上角设置您的DeepSeek API Key');
-                settingsBtn.click(); // Open the modal for the user
+                settingsBtn.click();
                 return;
             }
 
             const questionIndex = parseInt(target.dataset.questionIndex, 10);
-            if (isNaN(questionIndex)) return;
-
+            if (isNaN(questionIndex)) {
+                console.error("Failed to get question index from button's data attribute.");
+                return;
+            }
+            
+            console.log(`Attempting to call getAIExplanation for question index: ${questionIndex}`);
             const userAnswer = target.dataset.userAnswer || null;
             getAIExplanation(questionIndex, userAnswer);
         }
     });
 
     async function getAIExplanation(questionIndex, userAnswer) {
+        console.log(`getAIExplanation started for index: ${questionIndex}.`);
         const aiButton = document.querySelector(`.btn-ai-explain[data-question-index="${questionIndex}"]`);
         const explanationContainer = document.getElementById(`ai-explanation-${questionIndex + 1}`);
         
-        // The entire logic is now wrapped in a single, robust try...catch...finally block.
         try {
             if (!aiButton || !explanationContainer) {
-                throw new Error(`内部错误：无法找到问题 ${questionIndex + 1} 的UI元素。`);
+                throw new Error(`内部UI错误：无法找到问题 ${questionIndex + 1} 的按钮或讲解容器。`);
             }
+            console.log("UI elements for AI explanation found successfully.");
 
-            // Initialize the official OpenAI library, pointing to DeepSeek's server.
-            // This is the new, robust way.
+            console.log("Initializing DeepSeek client...");
             const deepseek = new OpenAI({
                 apiKey: userApiKey,
                 baseURL: "https://api.deepseek.com",
-                dangerouslyAllowBrowser: true // Necessary for browser-side usage
+                dangerouslyAllowBrowser: true
             });
+            console.log("DeepSeek client initialized.");
             
             aiButton.disabled = true;
             aiButton.textContent = '思考中...';
 
             const question = questionsData[questionIndex];
             if (!question) {
-                throw new Error(`内部错误：找不到题目索引 ${questionIndex} 的数据。`);
+                throw new Error(`内部数据错误：找不到题目索引 ${questionIndex} 的数据。`);
             }
+            console.log("Question data found:", question);
 
             explanationContainer.style.display = 'block';
             explanationContainer.textContent = '';
@@ -261,7 +283,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             prompt += "\n请开始你的讲解：";
 
-            // Use the library's streaming method. It's much cleaner and more reliable.
+            console.log("Sending request to DeepSeek API...");
             const stream = await deepseek.chat.completions.create({
                 model: "deepseek-chat",
                 messages: [
@@ -270,26 +292,30 @@ document.addEventListener('DOMContentLoaded', async () => {
                 ],
                 stream: true,
             });
+            console.log("Request sent. Stream received.");
 
             aiButton.style.display = 'none';
+            console.log("AI button hidden, starting to process stream...");
 
-            // Use a modern for-await-of loop to handle the stream.
+            let receivedContent = false;
             for await (const chunk of stream) {
                 const content = chunk.choices[0]?.delta?.content || "";
                 if (content) {
+                    receivedContent = true;
                     explanationContainer.textContent += content;
                 }
             }
+            console.log("Stream processing finished.");
 
-            if (explanationContainer.textContent.trim() === '') {
+            if (!receivedContent) {
                 throw new Error("AI返回了空内容，请重试。");
             }
 
         } catch (error) {
-            console.error('AI Explanation Error:', error);
-            // The library provides detailed error objects.
+            console.error('--- A.I. EXPLANATION FAILED ---');
+            console.error('Full Error Object:', error);
             const errorMessage = error.message || String(error);
-            alert(`😥 抱歉，AI讲解失败了。\n\n错误信息: ${errorMessage}\n\n这可能是由于：\n1. 网络连接问题。\n2. API Key不正确或账户余额不足。\n3. DeepSeek服务器暂时无法访问。\n\n请检查后重试。`);
+            alert(`😥 抱歉，AI讲解失败了。\n\n错误信息: ${errorMessage}\n\n请按F12打开开发者工具，在Console(控制台)中查看详细错误日志。`);
             
             if (aiButton) {
                 aiButton.style.display = 'inline-block';
@@ -300,6 +326,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 explanationContainer.style.display = 'none';
             }
         } finally {
+            console.log(`getAIExplanation finished for index: ${questionIndex}.`);
             if (explanationContainer) {
                 explanationContainer.classList.remove('streaming');
             }
@@ -309,14 +336,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     function setupModal() {
         const apiKeyForm = document.getElementById('api-key-form');
         const saveLogic = () => {
+            console.log("Save API Key logic started.");
             const key = apiKeyInput.value.trim();
             if (key) {
                 userApiKey = key;
                 sessionStorage.setItem('deepseek_api_key', key);
+                console.log("API Key saved to session storage.");
                 apiKeyModal.style.display = 'none';
                 alert('API Key 已保存。现在您可以点击 "AI 讲解" 按钮了。');
-                // NO MORE SLOW LOOP HERE
             } else {
+                console.warn("Attempted to save an empty API Key.");
                 alert('API Key不能为空。');
             }
         };
