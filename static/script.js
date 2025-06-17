@@ -148,6 +148,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (userAnswer) {
                 aiButton.dataset.userAnswer = userAnswer;
             }
+            // New Robust Logic: Disable button if no key is set
+            if (!userApiKey) {
+                aiButton.disabled = true;
+                aiButton.title = '请先在右上角设置 API Key';
+            }
             footerEl.querySelector('.correct-answer').insertAdjacentElement('afterend', aiButton);
         }
 
@@ -207,6 +212,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     async function getAIExplanation(questionIndex, userAnswer) {
+        const question = questionsData[questionIndex];
+
+        // Guard clause against missing question data
+        if (!question) {
+            alert(`出现内部错误：找不到题目索引 ${questionIndex} 的数据，无法生成AI讲解。`);
+            return;
+        }
+
         const aiButton = document.querySelector(`.btn-ai-explain[data-question-index="${questionIndex}"]`);
         aiButton.disabled = true;
         aiButton.textContent = '思考中...';
@@ -219,7 +232,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
 
-        const question = questionsData[questionIndex];
         const explanationContainer = document.getElementById(`ai-explanation-${questionIndex + 1}`);
         explanationContainer.style.display = 'block';
         explanationContainer.textContent = '🤖 正在向 DeepSeek AI 请求讲解...';
@@ -300,17 +312,27 @@ document.addEventListener('DOMContentLoaded', async () => {
             apiKeyModal.style.display = 'none';
         });
 
-        apiKeyForm.addEventListener('submit', (e) => {
-            e.preventDefault(); // Prevent form from submitting and reloading the page
+        saveApiKeyBtn.addEventListener('click', () => {
             const key = apiKeyInput.value.trim();
             if (key) {
                 userApiKey = key;
                 sessionStorage.setItem('deepseek_api_key', key);
                 apiKeyModal.style.display = 'none';
                 alert('API Key已保存（仅在本次会话中有效）。');
+                
+                // New Robust Logic: Enable all visible AI buttons after saving the key
+                document.querySelectorAll('.btn-ai-explain:disabled').forEach(btn => {
+                    btn.disabled = false;
+                    btn.title = '';
+                });
             } else {
                 alert('API Key不能为空。');
             }
+        });
+
+        apiKeyForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Prevent form from submitting and reloading the page
+            saveApiKeyBtn.click(); // Trigger the click event of the save button
         });
 
         apiKeyModal.addEventListener('click', (e) => {
