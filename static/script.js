@@ -260,23 +260,38 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`API Error: ${response.status} ${response.statusText}. Details: ${JSON.stringify(errorData)}`);
+                // Try to get error details from API response, else use status text
+                let errorDetails = response.statusText;
+                try {
+                    const errorData = await response.json();
+                    errorDetails = `(${errorData.error?.code || 'Unknown Code'}) ${errorData.error?.message || 'No details provided.'}`;
+                } catch (e) {
+                    // Ignore if response body is not JSON
+                }
+                throw new Error(`API 请求失败，状态码: ${response.status}. 错误详情: ${errorDetails}`);
             }
 
             const data = await response.json();
+            if (!data.choices || data.choices.length === 0 || !data.choices[0].message.content) {
+                throw new Error("API 返回的数据格式不正确，缺少讲解内容。");
+            }
+
             const explanation = data.choices[0].message.content;
             explanationContainer.textContent = explanation;
+            aiButton.style.display = 'none'; // Hide button only on success
 
         } catch (error) {
             console.error('AI Explanation Error:', error);
-            explanationContainer.textContent = `😥 抱歉，AI讲解失败了。请检查您的网络连接或API Key是否正确有效。\n错误信息: ${error.message}`;
-        } finally {
-            aiButton.style.display = 'none'; // Hide button after use
+            explanationContainer.style.display = 'none'; // Hide container on error
+            alert(`😥 抱歉，AI讲解失败了。\n\n错误信息: ${error.message}\n\n请检查：\n1. 您的网络连接是否正常。\n2. API Key是否正确且有足够余额。\n3. 浏览器控制台(F12)是否有更详细的错误输出。`);
+            aiButton.disabled = false;
+            aiButton.textContent = '重试讲解';
         }
     }
 
     function setupModal() {
+        const apiKeyForm = document.getElementById('api-key-form');
+
         settingsBtn.addEventListener('click', () => {
             apiKeyModal.style.display = 'flex';
         });
@@ -285,7 +300,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             apiKeyModal.style.display = 'none';
         });
 
-        saveApiKeyBtn.addEventListener('click', () => {
+        apiKeyForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Prevent form from submitting and reloading the page
             const key = apiKeyInput.value.trim();
             if (key) {
                 userApiKey = key;
