@@ -220,60 +220,56 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function getAIExplanation(questionIndex, userAnswer) {
         const aiButton = document.querySelector(`.btn-ai-explain[data-question-index="${questionIndex}"]`);
-        // Defensive check, if button is not found, we cannot proceed.
-        if (!aiButton) {
-            alert(`内部错误：无法找到问题 ${questionIndex + 1} 的AI讲解按钮。`);
-            return;
-        }
-        
-        aiButton.disabled = true;
-        aiButton.textContent = '思考中...';
-
-        const question = questionsData[questionIndex];
-
-        // Guard clause against missing question data
-        if (!question) {
-            alert(`出现内部错误：找不到题目索引 ${questionIndex} 的数据，无法生成AI讲解。`);
-            return;
-        }
-
         const explanationContainer = document.getElementById(`ai-explanation-${questionIndex + 1}`);
-        explanationContainer.style.display = 'block';
-        explanationContainer.textContent = '';
-        explanationContainer.classList.add('streaming');
 
-        let prompt = `你是一个友善且专业的计算机科学老师。请用中文、简洁易懂地解释下面这道题。请重点解释为什么正确答案是这个，而不是用户选择的错误答案（如果提供了用户的答案）。
+        try {
+            if (!aiButton || !explanationContainer) {
+                throw new Error(`内部错误：无法找到问题 ${questionIndex + 1} 的UI元素。`);
+            }
+            
+            aiButton.disabled = true;
+            aiButton.textContent = '思考中...';
+
+            const question = questionsData[questionIndex];
+            if (!question) {
+                throw new Error(`内部错误：找不到题目索引 ${questionIndex} 的数据。`);
+            }
+
+            explanationContainer.style.display = 'block';
+            explanationContainer.textContent = '';
+            explanationContainer.classList.add('streaming');
+
+            let prompt = `你是一个友善且专业的计算机科学老师。请用中文、简洁易懂地解释下面这道题。请重点解释为什么正确答案是这个，而不是用户选择的错误答案（如果提供了用户的答案）。
 
 题目：${question.question}
 `;
 
-        if (question.type === 'multiple_choice' && question.options) {
-            prompt += `选项：\n${question.options.map((opt, i) => `${['A', 'B', 'C', 'D', 'E', 'F'][i]}. ${opt}`).join('\n')}\n`;
-        }
-        
-        prompt += `正确答案是：${question.answer}\n`;
+            if (question.type === 'multiple_choice' && question.options) {
+                prompt += `选项：\n${question.options.map((opt, i) => `${['A', 'B', 'C', 'D', 'E', 'F'][i]}. ${opt}`).join('\n')}\n`;
+            }
+            
+            prompt += `正确答案是：${question.answer}\n`;
 
-        if (userAnswer) {
-             prompt += `我选择了：${userAnswer}\n`;
-        }
-        
-        prompt += "\n请开始你的讲解：";
+            if (userAnswer) {
+                 prompt += `我选择了：${userAnswer}\n`;
+            }
+            
+            prompt += "\n请开始你的讲解：";
 
-        try {
             const response = await fetch("https://api.deepseek.com/chat/completions", {
                 method: 'POST',
-                signal: AbortSignal.timeout(60000), // 60-second timeout for stream
+                signal: AbortSignal.timeout(60000),
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${userApiKey}`
                 },
                 body: JSON.stringify({
-                    model: "deepseek-chat", // Use the chat model
+                    model: "deepseek-chat",
                     messages: [
                         {"role": "system", "content": "你是一个友善且专业的计算机科学老师。"},
                         {"role": "user", "content": prompt}
                     ],
-                    stream: true, // Enable streaming
+                    stream: true,
                     temperature: 0.7
                 })
             });
@@ -288,7 +284,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 throw new Error("响应体为空，无法进行流式读取。");
             }
             
-            aiButton.style.display = 'none'; // Hide button once stream starts
+            aiButton.style.display = 'none';
 
             const reader = response.body.getReader();
             const decoder = new TextDecoder('utf-8');
@@ -296,45 +292,46 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             while(true) {
                 const { done, value } = await reader.read();
-                if (done) {
-                    break;
-                }
+                if (done) break;
                 
                 buffer += decoder.decode(value, { stream: true });
                 const lines = buffer.split('\n');
                 buffer = lines.pop() || '';
 
                 for (const line of lines) {
-                    if (line.trim() === '' || !line.startsWith('data:')) {
-                        continue;
-                    }
+                    if (line.trim() === '' || !line.startsWith('data:')) continue;
 
                     const data = line.substring(5).trim();
-                    if (data === '[DONE]') {
-                        break;
-                    }
+                    if (data === '[DONE]') break;
 
-                    try {
-                        const parsed = JSON.parse(data);
-                        const content = parsed.choices?.[0]?.delta?.content;
-                        if (content) {
-                            explanationContainer.textContent += content;
-                        }
-                    } catch (error) {
-                        console.error("流式数据解析失败:", error, "数据块:", data);
+                    const parsed = JSON.parse(data);
+                    const content = parsed.choices?.[0]?.delta?.content;
+                    if (content) {
+                        explanationContainer.textContent += content;
                     }
                 }
             }
 
+            if (explanationContainer.textContent.trim() === '') {
+                throw new Error("AI返回了空内容，请重试。");
+            }
+
         } catch (error) {
             console.error('AI Explanation Error:', error);
-            // Provide a clearer, more actionable error message
             alert(`😥 抱歉，AI讲解失败了。\n\n错误信息: ${String(error.message)}\n\n这可能是由于：\n1. 网络超时或连接中断。\n2. API Key不正确或账户余额不足。\n3. DeepSeek服务器暂时无法访问。\n\n请检查后重试。`);
-            aiButton.disabled = false;
-            aiButton.textContent = '重试讲解';
-            explanationContainer.style.display = 'none'; // Hide container on error
+            
+            if (aiButton) {
+                aiButton.style.display = 'inline-block';
+                aiButton.disabled = false;
+                aiButton.textContent = '重试讲解';
+            }
+            if (explanationContainer) {
+                explanationContainer.style.display = 'none';
+            }
         } finally {
-            explanationContainer.classList.remove('streaming');
+            if (explanationContainer) {
+                explanationContainer.classList.remove('streaming');
+            }
         }
     }
 
