@@ -22,10 +22,12 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: var(--card-background-color);
-    padding: 0 50px;
-    border-bottom: 1px solid var(--border-color);
-    height: 64px;
+    padding: 10px 30px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e0e0e0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .logo {
@@ -176,16 +178,131 @@ header {
 
 
 .question-footer {
-    margin-top: 16px;
-    padding: 12px;
-    background-color: #fafafa;
-    border-radius: 4px;
-    border: 1px solid var(--border-color);
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #eee;
+    margin-top: 15px;
+    color: #333;
 }
 
-.correct-answer {
+.question-footer .correct-answer {
     font-weight: bold;
-    color: var(--primary-color);
+    color: #28a745;
+}
+
+.btn-ai-explain {
+    margin-left: 15px;
+    padding: 5px 10px;
+    border: 1px solid #17a2b8;
+    background-color: #17a2b8;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.btn-ai-explain:hover {
+    background-color: #138496;
+}
+
+.btn-ai-explain:disabled {
+    background-color: #ccc;
+    border-color: #ccc;
+    cursor: not-allowed;
+}
+
+.ai-explanation-container {
+    margin-top: 15px;
+    padding: 15px;
+    border: 1px solid #d1ecf1;
+    border-radius: 5px;
+    background-color: #f8ffff;
+    white-space: pre-wrap;
+    line-height: 1.6;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content h2 {
+    margin-top: 0;
+}
+
+.modal-content p {
+    margin-bottom: 20px;
+}
+
+.modal-content input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.modal-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#save-api-key-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+#close-modal-btn {
+    background-color: #6c757d;
+    color: white;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-btn {
+    padding: 8px 15px;
+    border: 1px solid #007bff;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.header-btn:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
 }
 
 .sidebar {

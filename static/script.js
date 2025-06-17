@@ -9,9 +9,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     const navTypeSelector = document.getElementById('nav-type-selector');
     const totalScoreEl = document.getElementById('total-score');
     
+    // AI Feature Elements
+    const settingsBtn = document.getElementById('settings-btn');
+    const apiKeyModal = document.getElementById('api-key-modal');
+    const closeApiKeyModalBtn = document.getElementById('close-modal-btn');
+    const saveApiKeyBtn = document.getElementById('save-api-key-btn');
+    const apiKeyInput = document.getElementById('api-key-input');
+
     let questionsData = [];
     let totalScore = 0;
     const questionScores = {};
+    let userApiKey = sessionStorage.getItem('deepseek_api_key') || '';
+
+    if (userApiKey) {
+        apiKeyInput.value = userApiKey;
+    }
 
     async function loadSubjects() {
         try {
@@ -96,6 +108,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div class="question-body">${optionsHtml}</div>
                     <div class="question-footer" id="footer-${questionNum}" style="display: none;">
                         <p>正确答案: <span class="correct-answer">${question.answer}</span></p>
+                        <div class="ai-explanation-container" id="ai-explanation-${questionNum}" style="display: none;"></div>
                     </div>
                 </div>
             `;
@@ -104,7 +117,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         quizContent.innerHTML = questionsHtml;
     }
     
-    function handleAnswer(questionIndex, isCorrect) {
+    function handleAnswer(questionIndex, isCorrect, userAnswer = null) {
         const questionNum = questionIndex + 1;
         
         if (questionScores[questionNum] !== undefined) return;
@@ -126,6 +139,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             scoreEl.textContent = `0.00 分`;
             scoreEl.classList.add('incorrect');
             navItems.forEach(item => item.classList.add('incorrect'));
+            
+            // Add AI Explain button
+            const aiButton = document.createElement('button');
+            aiButton.textContent = 'AI 讲解';
+            aiButton.className = 'btn-ai-explain';
+            aiButton.dataset.questionIndex = questionIndex;
+            if (userAnswer) {
+                aiButton.dataset.userAnswer = userAnswer;
+            }
+            footerEl.querySelector('.correct-answer').insertAdjacentElement('afterend', aiButton);
         }
 
         totalScore = Object.values(questionScores).reduce((sum, score) => sum + score, 0);
@@ -157,25 +180,130 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
         
-        handleAnswer(questionIndex, isCorrect);
+        handleAnswer(questionIndex, isCorrect, selectedValue);
     });
 
     quizContent.addEventListener('click', (e) => {
-        if (!e.target.classList.contains('submit-fill-in')) return;
+        const target = e.target;
+        if (target.classList.contains('submit-fill-in')) {
+            const questionNum = parseInt(target.dataset.questionIndex, 10);
+            const questionIndex = questionNum - 1;
+            const question = questionsData[questionIndex];
+            
+            const card = document.getElementById(`question-${questionNum}`);
+            const inputEl = card.querySelector('input[type="text"]');
+            const userAnswer = inputEl.value.trim();
+            if (!userAnswer) return;
 
-        const questionNum = parseInt(e.target.dataset.questionIndex, 10);
-        const questionIndex = questionNum - 1;
-        const question = questionsData[questionIndex];
-        
-        const card = document.getElementById(`question-${questionNum}`);
-        const inputEl = card.querySelector('input[type="text"]');
-        const userAnswer = inputEl.value.trim();
-        const correctAnswers = String(question.answer).split(/[,，]/).map(s => s.trim());
-        const isCorrect = correctAnswers.includes(userAnswer);
+            const correctAnswers = String(question.answer).split(/[,，]/).map(s => s.trim());
+            const isCorrect = correctAnswers.includes(userAnswer);
 
-        handleAnswer(questionIndex, isCorrect);
+            handleAnswer(questionIndex, isCorrect, userAnswer);
+        } else if (target.classList.contains('btn-ai-explain')) {
+            const questionIndex = parseInt(target.dataset.questionIndex, 10);
+            const userAnswer = target.dataset.userAnswer || null;
+            getAIExplanation(questionIndex, userAnswer);
+        }
     });
-    
+
+    async function getAIExplanation(questionIndex, userAnswer) {
+        const aiButton = document.querySelector(`.btn-ai-explain[data-question-index="${questionIndex}"]`);
+        aiButton.disabled = true;
+        aiButton.textContent = '思考中...';
+
+        if (!userApiKey) {
+            alert('请先在右上角设置您的DeepSeek API Key');
+            apiKeyModal.style.display = 'flex';
+            aiButton.disabled = false;
+            aiButton.textContent = 'AI 讲解';
+            return;
+        }
+
+        const question = questionsData[questionIndex];
+        const explanationContainer = document.getElementById(`ai-explanation-${questionIndex + 1}`);
+        explanationContainer.style.display = 'block';
+        explanationContainer.textContent = '🤖 正在向 DeepSeek AI 请求讲解...';
+
+        let prompt = `你是一个友善且专业的计算机科学老师。请用中文、简洁易懂地解释下面这道题。请重点解释为什么正确答案是这个，而不是用户选择的错误答案（如果提供了用户的答案）。
+
+题目：${question.question}
+`;
+
+        if (question.type === 'multiple_choice' && question.options) {
+            prompt += `选项：\n${question.options.map((opt, i) => `${['A', 'B', 'C', 'D', 'E', 'F'][i]}. ${opt}`).join('\n')}\n`;
+        }
+        
+        prompt += `正确答案是：${question.answer}\n`;
+
+        if (userAnswer) {
+             prompt += `我选择了：${userAnswer}\n`;
+        }
+        
+        prompt += "\n请开始你的讲解：";
+
+        try {
+            const response = await fetch("https://api.deepseek.com/chat/completions", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${userApiKey}`
+                },
+                body: JSON.stringify({
+                    model: "deepseek-reasoner",
+                    messages: [
+                        {"role": "system", "content": "你是一个友善且专业的计算机科学老师。"},
+                        {"role": "user", "content": prompt}
+                    ],
+                    stream: false,
+                    temperature: 0.7
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`API Error: ${response.status} ${response.statusText}. Details: ${JSON.stringify(errorData)}`);
+            }
+
+            const data = await response.json();
+            const explanation = data.choices[0].message.content;
+            explanationContainer.textContent = explanation;
+
+        } catch (error) {
+            console.error('AI Explanation Error:', error);
+            explanationContainer.textContent = `😥 抱歉，AI讲解失败了。请检查您的网络连接或API Key是否正确有效。\n错误信息: ${error.message}`;
+        } finally {
+            aiButton.style.display = 'none'; // Hide button after use
+        }
+    }
+
+    function setupModal() {
+        settingsBtn.addEventListener('click', () => {
+            apiKeyModal.style.display = 'flex';
+        });
+
+        closeApiKeyModalBtn.addEventListener('click', () => {
+            apiKeyModal.style.display = 'none';
+        });
+
+        saveApiKeyBtn.addEventListener('click', () => {
+            const key = apiKeyInput.value.trim();
+            if (key) {
+                userApiKey = key;
+                sessionStorage.setItem('deepseek_api_key', key);
+                apiKeyModal.style.display = 'none';
+                alert('API Key已保存（仅在本次会话中有效）。');
+            } else {
+                alert('API Key不能为空。');
+            }
+        });
+
+        apiKeyModal.addEventListener('click', (e) => {
+            if (e.target === apiKeyModal) {
+                apiKeyModal.style.display = 'none';
+            }
+        });
+    }
+
     function attachNavListeners() {
         navGrid.addEventListener('click', (e) => {
             if (!e.target.classList.contains('nav-item')) return;
@@ -242,5 +370,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         renderNavigation(e.target.value);
     });
 
+    setupModal();
     loadSubjects();
 }); 
