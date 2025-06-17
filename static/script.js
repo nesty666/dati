@@ -11,11 +11,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     let questionsData = [];
     let totalScore = 0;
+    const questionScores = {};
 
     async function loadSubjects() {
         try {
-            // No longer using GitHub API, using the self-hosted manifest via JsDelivr
-            const response = await fetch(`https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@latest/${DATA_PATH}/subjects.json`);
+            const response = await fetch(`https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@latest/${DATA_PATH}/subjects.json?t=${new Date().getTime()}`);
             const subjects = await response.json();
 
             subjectSelector.innerHTML = '<option value="">--请选择一个科目--</option>';
@@ -39,14 +39,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <p>请从上方的下拉菜单中选择一个科目开始答题。</p>
                 </div>`;
             questionsData = [];
+            totalScore = 0;
             renderNavigation();
             return;
         }
 
         try {
-            const response = await fetch(`https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@latest/${DATA_PATH}/${fileName}`);
+            const response = await fetch(`https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@latest/${DATA_PATH}/${fileName}?t=${new Date().getTime()}`);
             questionsData = await response.json();
             totalScore = 0;
+            Object.keys(questionScores).forEach(key => delete questionScores[key]);
             totalScoreEl.textContent = '0';
             renderQuestions();
             renderNavigation();
@@ -57,14 +59,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function renderQuestions() {
-        quizContent.innerHTML = '';
-        questionsData.forEach((question, index) => {
+        const questionsHtml = questionsData.map((question, index) => {
             const questionNum = index + 1;
-            const questionCard = document.createElement('div');
-            questionCard.className = 'question-card';
-            questionCard.id = `question-${questionNum}`;
-
             let optionsHtml = '';
+
             if (question.type === 'multiple_choice') {
                 const optionLetters = ['A', 'B', 'C', 'D', 'E', 'F'];
                 optionsHtml = `<ul class="options-list">` +
@@ -89,152 +87,152 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>`;
             }
 
-            questionCard.innerHTML = `
-                <div class="question-header">
-                    <p class="question-title">${questionNum}. ${question.question}</p>
-                    <span class="question-score" id="score-${questionNum}"></span>
-                </div>
-                <div class="question-body">${optionsHtml}</div>
-                <div class="question-footer" id="footer-${questionNum}" style="display: none;">
-                    <p>正确答案: <span class="correct-answer">${question.answer}</span></p>
+            return `
+                <div class="question-card" id="question-${questionNum}">
+                    <div class="question-header">
+                        <p class="question-title">${questionNum}. ${question.question}</p>
+                        <span class="question-score" id="score-${questionNum}"></span>
+                    </div>
+                    <div class="question-body">${optionsHtml}</div>
+                    <div class="question-footer" id="footer-${questionNum}" style="display: none;">
+                        <p>正确答案: <span class="correct-answer">${question.answer}</span></p>
+                    </div>
                 </div>
             `;
-            quizContent.appendChild(questionCard);
-            attachAnswerHandlers(questionCard, question, index);
-        });
+        }).join('');
+        
+        quizContent.innerHTML = questionsHtml;
     }
     
-    function attachAnswerHandlers(card, question, index) {
+    function handleAnswer(questionIndex, isCorrect) {
+        const questionNum = questionIndex + 1;
+        
+        if (questionScores[questionNum] !== undefined) return;
+
+        const scoreEl = document.getElementById(`score-${questionNum}`);
+        const footerEl = document.getElementById(`footer-${questionNum}`);
+        const cardEl = document.getElementById(`question-${questionNum}`);
+        const navItems = navGrid.querySelectorAll(`.nav-item[data-question-index='${questionNum}']`);
+        
         const questionScore = 5;
-        const questionNum = index + 1;
 
-        const handleAnswer = (isCorrect) => {
-            const scoreEl = card.querySelector(`#score-${questionNum}`);
-            const footerEl = card.querySelector(`#footer-${questionNum}`);
-            const navItems = navGrid.querySelectorAll(`.nav-item[data-question-index='${questionNum}']`);
-
-            if (isCorrect) {
-                totalScore += questionScore;
-                scoreEl.textContent = `${questionScore.toFixed(2)} 分`;
-                scoreEl.classList.add('correct');
-                navItems.forEach(item => item.classList.add('correct'));
-            } else {
-                scoreEl.textContent = `0.00 分`;
-                scoreEl.classList.add('incorrect');
-                navItems.forEach(item => item.classList.add('incorrect'));
-            }
-
-            totalScoreEl.textContent = totalScore;
-            footerEl.style.display = 'block';
-            card.classList.add('disabled');
-        };
-
-        if (question.type === 'multiple_choice' || question.type === 'true_false') {
-            const options = card.querySelectorAll(`input[name='question-${questionNum}']`);
-            options.forEach(option => {
-                option.addEventListener('change', (e) => {
-                    const selectedValue = e.target.value;
-                    const isCorrect = selectedValue.toLowerCase() === String(question.answer).toLowerCase();
-                    
-                    const parentLi = e.target.closest('li');
-                    if (isCorrect) {
-                        parentLi.classList.add('correct');
-                    } else {
-                        parentLi.classList.add('incorrect');
-                        const correctOptionValue = String(question.answer);
-                        const correctInput = Array.from(card.querySelectorAll('input')).find(input => input.value.toLowerCase() === correctOptionValue.toLowerCase());
-                        if (correctInput) {
-                            correctInput.closest('li').classList.add('correct');
-                        }
-                    }
-                    handleAnswer(isCorrect);
-                });
-            });
-        } else if (question.type === 'fill_in') {
-            const submitBtn = card.querySelector(`.submit-fill-in`);
-            const inputEl = card.querySelector('input[type="text"]');
-            
-            submitBtn.addEventListener('click', () => {
-                const userAnswer = inputEl.value.trim();
-                const correctAnswers = String(question.answer).split(',').map(s => s.trim());
-                const isCorrect = correctAnswers.includes(userAnswer);
-                handleAnswer(isCorrect);
-            });
+        if (isCorrect) {
+            questionScores[questionNum] = questionScore;
+            scoreEl.textContent = `${questionScore.toFixed(2)} 分`;
+            scoreEl.classList.add('correct');
+            navItems.forEach(item => item.classList.add('correct'));
+        } else {
+            questionScores[questionNum] = 0;
+            scoreEl.textContent = `0.00 分`;
+            scoreEl.classList.add('incorrect');
+            navItems.forEach(item => item.classList.add('incorrect'));
         }
+
+        totalScore = Object.values(questionScores).reduce((sum, score) => sum + score, 0);
+        totalScoreEl.textContent = totalScore;
+        footerEl.style.display = 'block';
+        cardEl.classList.add('disabled');
     }
+
+    quizContent.addEventListener('change', (e) => {
+        if (e.target.type !== 'radio' || !e.target.name.startsWith('question-')) return;
+
+        const questionNum = parseInt(e.target.name.split('-')[1], 10);
+        const questionIndex = questionNum - 1;
+        const question = questionsData[questionIndex];
+
+        const selectedValue = e.target.value;
+        const isCorrect = selectedValue.toLowerCase() === String(question.answer).toLowerCase();
+        
+        const parentLi = e.target.closest('li');
+        if (isCorrect) {
+            parentLi.classList.add('correct');
+        } else {
+            parentLi.classList.add('incorrect');
+            const correctOptionValue = String(question.answer);
+            const card = document.getElementById(`question-${questionNum}`);
+            const correctInput = Array.from(card.querySelectorAll('input')).find(input => input.value.toLowerCase() === correctOptionValue.toLowerCase());
+            if (correctInput) {
+                correctInput.closest('li').classList.add('correct');
+            }
+        }
+        
+        handleAnswer(questionIndex, isCorrect);
+    });
+
+    quizContent.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('submit-fill-in')) return;
+
+        const questionNum = parseInt(e.target.dataset.questionIndex, 10);
+        const questionIndex = questionNum - 1;
+        const question = questionsData[questionIndex];
+        
+        const card = document.getElementById(`question-${questionNum}`);
+        const inputEl = card.querySelector('input[type="text"]');
+        const userAnswer = inputEl.value.trim();
+        const correctAnswers = String(question.answer).split(/[,，]/).map(s => s.trim());
+        const isCorrect = correctAnswers.includes(userAnswer);
+
+        handleAnswer(questionIndex, isCorrect);
+    });
     
     function attachNavListeners() {
-        const navItems = document.querySelectorAll('.nav-item');
-        navItems.forEach(item => {
-            if (item.dataset.listenerAttached) return;
-
-            item.addEventListener('click', (e) => {
-                e.preventDefault();
-                const questionId = item.getAttribute('href');
-                const targetQuestion = document.querySelector(questionId);
-                if (targetQuestion) {
-                    targetQuestion.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-            item.dataset.listenerAttached = 'true';
+        navGrid.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('nav-item')) return;
+            e.preventDefault();
+            const questionId = e.target.getAttribute('href');
+            const targetQuestion = document.querySelector(questionId);
+            if (targetQuestion) {
+                targetQuestion.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
         });
     }
 
     function renderNavigation(viewType = 'normal') {
-        navGrid.innerHTML = ''; 
+        let navHtml = ''; 
 
-        if (questionsData.length === 0) return;
+        if (questionsData.length > 0) {
+            if (viewType === 'normal') {
+                navHtml = questionsData.map((_q, index) => {
+                    const questionNum = index + 1;
+                    const status = questionScores[questionNum] === 5 ? 'correct' : (questionScores[questionNum] === 0 ? 'incorrect' : '');
+                    return `<a href="#question-${questionNum}" class="nav-item ${status}" data-question-index="${questionNum}">${questionNum}</a>`;
+                }).join('');
+            } else if (viewType === 'categorized') {
+                const categories = {
+                    multiple_choice: { title: '选择题', questions: [] },
+                    true_false: { title: '判断题', questions: [] },
+                    fill_in: { title: '填空题', questions: [] }
+                };
 
-        if (viewType === 'normal') {
-            questionsData.forEach((_question, index) => {
-                const questionNum = index + 1;
-                const navItem = document.createElement('a');
-                navItem.href = `#question-${questionNum}`;
-                navItem.className = 'nav-item';
-                navItem.dataset.questionIndex = questionNum;
-                navItem.textContent = questionNum;
-                navGrid.appendChild(navItem);
-            });
-        } else if (viewType === 'categorized') {
-            const categories = {
-                multiple_choice: { title: '选择题', questions: [] },
-                true_false: { title: '判断题', questions: [] },
-                fill_in: { title: '填空题', questions: [] }
-            };
+                questionsData.forEach((question, index) => {
+                    if (categories[question.type]) {
+                        categories[question.type].questions.push(index + 1);
+                    }
+                });
 
-            questionsData.forEach((question, index) => {
-                if (categories[question.type]) {
-                    categories[question.type].questions.push(index + 1);
-                }
-            });
+                const displayOrder = ['multiple_choice', 'true_false', 'fill_in'];
 
-            const displayOrder = ['multiple_choice', 'true_false', 'fill_in'];
-
-            displayOrder.forEach(type => {
-                const category = categories[type];
-                if (category.questions.length > 0) {
-                    const titleEl = document.createElement('h4');
-                    titleEl.className = 'nav-category-title';
-                    titleEl.textContent = category.title;
-                    navGrid.appendChild(titleEl);
-
-                    category.questions.forEach(questionNum => {
-                        const navItem = document.createElement('a');
-                        navItem.href = `#question-${questionNum}`;
-                        navItem.className = 'nav-item';
-                        navItem.dataset.questionIndex = questionNum;
-                        navItem.textContent = questionNum;
-                        navGrid.appendChild(navItem);
-                    });
-                }
-            });
+                displayOrder.forEach(type => {
+                    const category = categories[type];
+                    if (category.questions.length > 0) {
+                        navHtml += `<h4 class="nav-category-title">${category.title}</h4>`;
+                        navHtml += category.questions.map(questionNum => {
+                            const status = questionScores[questionNum] === 5 ? 'correct' : (questionScores[questionNum] === 0 ? 'incorrect' : '');
+                             return `<a href="#question-${questionNum}" class="nav-item ${status}" data-question-index="${questionNum}">${questionNum}</a>`;
+                        }).join('');
+                    }
+                });
+            }
         }
-
-        attachNavListeners();
+        
+        navGrid.innerHTML = navHtml;
     }
+    
+    attachNavListeners();
 
     subjectSelector.addEventListener('change', (e) => {
         loadQuestions(e.target.value);
