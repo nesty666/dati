@@ -122,8 +122,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         if (questionScores[questionNum] !== undefined) return;
 
-        const scoreEl = document.getElementById(`score-${questionNum}`);
         const footerEl = document.getElementById(`footer-${questionNum}`);
+        if (!footerEl) return; // Defensive coding
+
+        const scoreEl = document.getElementById(`score-${questionNum}`);
         const cardEl = document.getElementById(`question-${questionNum}`);
         const navItems = navGrid.querySelectorAll(`.nav-item[data-question-index='${questionNum}']`);
         
@@ -131,16 +133,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (isCorrect) {
             questionScores[questionNum] = questionScore;
-            scoreEl.textContent = `${questionScore.toFixed(2)} 分`;
-            scoreEl.classList.add('correct');
+            if(scoreEl) scoreEl.textContent = `${questionScore.toFixed(2)} 分`;
+            if(scoreEl) scoreEl.classList.add('correct');
             navItems.forEach(item => item.classList.add('correct'));
         } else {
             questionScores[questionNum] = 0;
-            scoreEl.textContent = `0.00 分`;
-            scoreEl.classList.add('incorrect');
+            if(scoreEl) scoreEl.textContent = `0.00 分`;
+            if(scoreEl) scoreEl.classList.add('incorrect');
             navItems.forEach(item => item.classList.add('incorrect'));
             
-            // Add AI Explain button
+            // SIMPLIFIED LOGIC: Button is always enabled.
             const aiButton = document.createElement('button');
             aiButton.textContent = 'AI 讲解';
             aiButton.className = 'btn-ai-explain';
@@ -148,18 +150,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (userAnswer) {
                 aiButton.dataset.userAnswer = userAnswer;
             }
-            // New Robust Logic: Disable button if no key is set
-            if (!userApiKey) {
-                aiButton.disabled = true;
-                aiButton.title = '请先在右上角设置 API Key';
-            }
             footerEl.appendChild(aiButton);
         }
 
         totalScore = Object.values(questionScores).reduce((sum, score) => sum + score, 0);
         totalScoreEl.textContent = totalScore;
         footerEl.style.display = 'block';
-        cardEl.classList.add('disabled');
+        if (cardEl) cardEl.classList.add('disabled');
     }
 
     quizContent.addEventListener('change', (e) => {
@@ -192,6 +189,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const target = e.target;
         if (target.classList.contains('submit-fill-in')) {
             const questionNum = parseInt(target.dataset.questionIndex, 10);
+            if (isNaN(questionNum)) return;
             const questionIndex = questionNum - 1;
             const question = questionsData[questionIndex];
             
@@ -205,11 +203,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             handleAnswer(questionIndex, isCorrect, userAnswer);
         } else if (target.classList.contains('btn-ai-explain')) {
-            // Defensive check
-            if (target.disabled) return;
-            
+            // NEW SIMPLIFIED LOGIC: Check for API Key ON CLICK
+            if (!userApiKey) {
+                alert('请先在右上角设置您的DeepSeek API Key');
+                settingsBtn.click(); // Open the modal for the user
+                return;
+            }
+
             const questionIndex = parseInt(target.dataset.questionIndex, 10);
-            if (isNaN(questionIndex)) return; // Exit if index is not a number
+            if (isNaN(questionIndex)) return;
 
             const userAnswer = target.dataset.userAnswer || null;
             getAIExplanation(questionIndex, userAnswer);
@@ -217,24 +219,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     async function getAIExplanation(questionIndex, userAnswer) {
+        const aiButton = document.querySelector(`.btn-ai-explain[data-question-index="${questionIndex}"]`);
+        // Defensive check, if button is not found, we cannot proceed.
+        if (!aiButton) {
+            alert(`内部错误：无法找到问题 ${questionIndex + 1} 的AI讲解按钮。`);
+            return;
+        }
+        
+        aiButton.disabled = true;
+        aiButton.textContent = '思考中...';
+
         const question = questionsData[questionIndex];
 
         // Guard clause against missing question data
         if (!question) {
             alert(`出现内部错误：找不到题目索引 ${questionIndex} 的数据，无法生成AI讲解。`);
-            return;
-        }
-
-        const aiButton = document.querySelector(`.btn-ai-explain[data-question-index="${questionIndex}"]`);
-        aiButton.disabled = true;
-        aiButton.textContent = '思考中...';
-
-        if (!userApiKey) {
-            alert('请先在右上角设置您的DeepSeek API Key');
-            apiKeyModal.style.display = 'flex';
-            // Reset button state
-            aiButton.disabled = false;
-            aiButton.textContent = 'AI 讲解';
             return;
         }
 
@@ -339,58 +338,33 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    function updateAIButtonsState(enabled) {
-        // This is a more efficient way to manage state by adding/removing a class
-        // on a container, instead of iterating over all buttons.
-        // For simplicity with the current structure, we will stick to a direct but clear approach.
-        document.querySelectorAll('.btn-ai-explain').forEach(btn => {
-            if (enabled) {
-                btn.disabled = false;
-                btn.title = '获取AI讲解';
-            } else {
-                btn.disabled = true;
-                btn.title = '请先在右上角设置 API Key';
-            }
-        });
-    }
-
     function setupModal() {
         const apiKeyForm = document.getElementById('api-key-form');
+        const saveLogic = () => {
+            const key = apiKeyInput.value.trim();
+            if (key) {
+                userApiKey = key;
+                sessionStorage.setItem('deepseek_api_key', key);
+                apiKeyModal.style.display = 'none';
+                alert('API Key 已保存。现在您可以点击 "AI 讲解" 按钮了。');
+                // NO MORE SLOW LOOP HERE
+            } else {
+                alert('API Key不能为空。');
+            }
+        };
 
         settingsBtn.addEventListener('click', () => {
             apiKeyModal.style.display = 'flex';
+            apiKeyInput.focus();
         });
 
         closeApiKeyModalBtn.addEventListener('click', () => {
             apiKeyModal.style.display = 'none';
         });
 
-        saveApiKeyBtn.addEventListener('click', () => {
-            const key = apiKeyInput.value.trim();
-            if (key) {
-                userApiKey = key;
-                sessionStorage.setItem('deepseek_api_key', key);
-                apiKeyModal.style.display = 'none';
-                alert('API Key已保存（仅在本次会话中有效）。');
-                updateAIButtonsState(true);
-            } else {
-                alert('API Key不能为空。');
-            }
-        });
-
         apiKeyForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            // Directly call the save logic instead of simulating a click
-            const key = apiKeyInput.value.trim();
-            if (key) {
-                userApiKey = key;
-                sessionStorage.setItem('deepseek_api_key', key);
-                apiKeyModal.style.display = 'none';
-                alert('API Key已保存（仅在本次会话中有效）。');
-                updateAIButtonsState(true);
-            } else {
-                alert('API Key不能为空。');
-            }
+            saveLogic();
         });
 
         apiKeyModal.addEventListener('click', (e) => {
