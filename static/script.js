@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 aiButton.disabled = true;
                 aiButton.title = '请先在右上角设置 API Key';
             }
-            footerEl.querySelector('.correct-answer').insertAdjacentElement('afterend', aiButton);
+            footerEl.appendChild(aiButton);
         }
 
         totalScore = Object.values(questionScores).reduce((sum, score) => sum + score, 0);
@@ -205,7 +205,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             handleAnswer(questionIndex, isCorrect, userAnswer);
         } else if (target.classList.contains('btn-ai-explain')) {
+            // Defensive check
+            if (target.disabled) return;
+            
             const questionIndex = parseInt(target.dataset.questionIndex, 10);
+            if (isNaN(questionIndex)) return; // Exit if index is not a number
+
             const userAnswer = target.dataset.userAnswer || null;
             getAIExplanation(questionIndex, userAnswer);
         }
@@ -227,6 +232,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!userApiKey) {
             alert('请先在右上角设置您的DeepSeek API Key');
             apiKeyModal.style.display = 'flex';
+            // Reset button state
             aiButton.disabled = false;
             aiButton.textContent = 'AI 讲解';
             return;
@@ -256,6 +262,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             const response = await fetch("https://api.deepseek.com/chat/completions", {
                 method: 'POST',
+                signal: AbortSignal.timeout(30000), // 30-second timeout
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${userApiKey}`
@@ -272,15 +279,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
 
             if (!response.ok) {
-                // Try to get error details from API response, else use status text
-                let errorDetails = response.statusText;
-                try {
-                    const errorData = await response.json();
-                    errorDetails = `(${errorData.error?.code || 'Unknown Code'}) ${errorData.error?.message || 'No details provided.'}`;
-                } catch (e) {
-                    // Ignore if response body is not JSON
-                }
-                throw new Error(`API 请求失败，状态码: ${response.status}. 错误详情: ${errorDetails}`);
+                const errorData = await response.json().catch(() => null); // Gracefully handle non-json error responses
+                const errorMsg = errorData?.error?.message || response.statusText || "未知API错误";
+                throw new Error(`API 请求失败，状态码: ${response.status}. 错误详情: ${errorMsg}`);
             }
 
             const data = await response.json();
@@ -295,10 +296,26 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch (error) {
             console.error('AI Explanation Error:', error);
             explanationContainer.style.display = 'none'; // Hide container on error
-            alert(`😥 抱歉，AI讲解失败了。\n\n错误信息: ${error.message}\n\n请检查：\n1. 您的网络连接是否正常。\n2. API Key是否正确且有足够余额。\n3. 浏览器控制台(F12)是否有更详细的错误输出。`);
+            // Provide a clearer, more actionable error message
+            alert(`😥 抱歉，AI讲解失败了。\n\n错误信息: ${String(error.message)}\n\n这可能是由于：\n1. 网络超时或连接中断。\n2. API Key不正确或账户余额不足。\n3. DeepSeek服务器暂时无法访问。\n\n请检查后重试。`);
             aiButton.disabled = false;
             aiButton.textContent = '重试讲解';
         }
+    }
+
+    function updateAIButtonsState(enabled) {
+        // This is a more efficient way to manage state by adding/removing a class
+        // on a container, instead of iterating over all buttons.
+        // For simplicity with the current structure, we will stick to a direct but clear approach.
+        document.querySelectorAll('.btn-ai-explain').forEach(btn => {
+            if (enabled) {
+                btn.disabled = false;
+                btn.title = '获取AI讲解';
+            } else {
+                btn.disabled = true;
+                btn.title = '请先在右上角设置 API Key';
+            }
+        });
     }
 
     function setupModal() {
@@ -319,20 +336,25 @@ document.addEventListener('DOMContentLoaded', async () => {
                 sessionStorage.setItem('deepseek_api_key', key);
                 apiKeyModal.style.display = 'none';
                 alert('API Key已保存（仅在本次会话中有效）。');
-                
-                // New Robust Logic: Enable all visible AI buttons after saving the key
-                document.querySelectorAll('.btn-ai-explain:disabled').forEach(btn => {
-                    btn.disabled = false;
-                    btn.title = '';
-                });
+                updateAIButtonsState(true);
             } else {
                 alert('API Key不能为空。');
             }
         });
 
         apiKeyForm.addEventListener('submit', (e) => {
-            e.preventDefault(); // Prevent form from submitting and reloading the page
-            saveApiKeyBtn.click(); // Trigger the click event of the save button
+            e.preventDefault();
+            // Directly call the save logic instead of simulating a click
+            const key = apiKeyInput.value.trim();
+            if (key) {
+                userApiKey = key;
+                sessionStorage.setItem('deepseek_api_key', key);
+                apiKeyModal.style.display = 'none';
+                alert('API Key已保存（仅在本次会话中有效）。');
+                updateAIButtonsState(true);
+            } else {
+                alert('API Key不能为空。');
+            }
         });
 
         apiKeyModal.addEventListener('click', (e) => {
