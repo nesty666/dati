@@ -240,7 +240,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const explanationContainer = document.getElementById(`ai-explanation-${questionIndex + 1}`);
         explanationContainer.style.display = 'block';
-        explanationContainer.textContent = '🤖 正在向 DeepSeek AI 请求讲解...';
+        explanationContainer.textContent = '';
+        explanationContainer.classList.add('streaming');
 
         let prompt = `你是一个友善且专业的计算机科学老师。请用中文、简洁易懂地解释下面这道题。请重点解释为什么正确答案是这个，而不是用户选择的错误答案（如果提供了用户的答案）。
 
@@ -262,44 +263,79 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             const response = await fetch("https://api.deepseek.com/chat/completions", {
                 method: 'POST',
-                signal: AbortSignal.timeout(30000), // 30-second timeout
+                signal: AbortSignal.timeout(60000), // 60-second timeout for stream
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${userApiKey}`
                 },
                 body: JSON.stringify({
-                    model: "deepseek-reasoner",
+                    model: "deepseek-chat", // Use the chat model
                     messages: [
                         {"role": "system", "content": "你是一个友善且专业的计算机科学老师。"},
                         {"role": "user", "content": prompt}
                     ],
-                    stream: false,
+                    stream: true, // Enable streaming
                     temperature: 0.7
                 })
             });
 
             if (!response.ok) {
-                const errorData = await response.json().catch(() => null); // Gracefully handle non-json error responses
+                const errorData = await response.json().catch(() => null);
                 const errorMsg = errorData?.error?.message || response.statusText || "未知API错误";
                 throw new Error(`API 请求失败，状态码: ${response.status}. 错误详情: ${errorMsg}`);
             }
 
-            const data = await response.json();
-            if (!data.choices || data.choices.length === 0 || !data.choices[0].message.content) {
-                throw new Error("API 返回的数据格式不正确，缺少讲解内容。");
+            if (!response.body) {
+                throw new Error("响应体为空，无法进行流式读取。");
             }
+            
+            aiButton.style.display = 'none'; // Hide button once stream starts
 
-            const explanation = data.choices[0].message.content;
-            explanationContainer.textContent = explanation;
-            aiButton.style.display = 'none'; // Hide button only on success
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder('utf-8');
+            let buffer = '';
+
+            while(true) {
+                const { done, value } = await reader.read();
+                if (done) {
+                    break;
+                }
+                
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split('\n');
+                buffer = lines.pop() || '';
+
+                for (const line of lines) {
+                    if (line.trim() === '' || !line.startsWith('data:')) {
+                        continue;
+                    }
+
+                    const data = line.substring(5).trim();
+                    if (data === '[DONE]') {
+                        break;
+                    }
+
+                    try {
+                        const parsed = JSON.parse(data);
+                        const content = parsed.choices?.[0]?.delta?.content;
+                        if (content) {
+                            explanationContainer.textContent += content;
+                        }
+                    } catch (error) {
+                        console.error("流式数据解析失败:", error, "数据块:", data);
+                    }
+                }
+            }
 
         } catch (error) {
             console.error('AI Explanation Error:', error);
-            explanationContainer.style.display = 'none'; // Hide container on error
             // Provide a clearer, more actionable error message
             alert(`😥 抱歉，AI讲解失败了。\n\n错误信息: ${String(error.message)}\n\n这可能是由于：\n1. 网络超时或连接中断。\n2. API Key不正确或账户余额不足。\n3. DeepSeek服务器暂时无法访问。\n\n请检查后重试。`);
             aiButton.disabled = false;
             aiButton.textContent = '重试讲解';
+            explanationContainer.style.display = 'none'; // Hide container on error
+        } finally {
+            explanationContainer.classList.remove('streaming');
         }
     }
 
