@@ -221,11 +221,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function getAIExplanation(questionIndex, userAnswer) {
         const aiButton = document.querySelector(`.btn-ai-explain[data-question-index="${questionIndex}"]`);
         const explanationContainer = document.getElementById(`ai-explanation-${questionIndex + 1}`);
-
+        
+        // The entire logic is now wrapped in a single, robust try...catch...finally block.
         try {
             if (!aiButton || !explanationContainer) {
                 throw new Error(`内部错误：无法找到问题 ${questionIndex + 1} 的UI元素。`);
             }
+
+            // Initialize the official OpenAI library, pointing to DeepSeek's server.
+            // This is the new, robust way.
+            const deepseek = new OpenAI({
+                apiKey: userApiKey,
+                baseURL: "https://api.deepseek.com",
+                dangerouslyAllowBrowser: true // Necessary for browser-side usage
+            });
             
             aiButton.disabled = true;
             aiButton.textContent = '思考中...';
@@ -243,72 +252,32 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 题目：${question.question}
 `;
-
             if (question.type === 'multiple_choice' && question.options) {
                 prompt += `选项：\n${question.options.map((opt, i) => `${['A', 'B', 'C', 'D', 'E', 'F'][i]}. ${opt}`).join('\n')}\n`;
             }
-            
             prompt += `正确答案是：${question.answer}\n`;
-
             if (userAnswer) {
                  prompt += `我选择了：${userAnswer}\n`;
             }
-            
             prompt += "\n请开始你的讲解：";
 
-            const response = await fetch("https://api.deepseek.com/chat/completions", {
-                method: 'POST',
-                signal: AbortSignal.timeout(60000),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${userApiKey}`
-                },
-                body: JSON.stringify({
-                    model: "deepseek-chat",
-                    messages: [
-                        {"role": "system", "content": "你是一个友善且专业的计算机科学老师。"},
-                        {"role": "user", "content": prompt}
-                    ],
-                    stream: true,
-                    temperature: 0.7
-                })
+            // Use the library's streaming method. It's much cleaner and more reliable.
+            const stream = await deepseek.chat.completions.create({
+                model: "deepseek-chat",
+                messages: [
+                    {"role": "system", "content": "你是一个友善且专业的计算机科学老师。"},
+                    {"role": "user", "content": prompt}
+                ],
+                stream: true,
             });
 
-            if (!response.ok) {
-                const errorData = await response.json().catch(() => null);
-                const errorMsg = errorData?.error?.message || response.statusText || "未知API错误";
-                throw new Error(`API 请求失败，状态码: ${response.status}. 错误详情: ${errorMsg}`);
-            }
-
-            if (!response.body) {
-                throw new Error("响应体为空，无法进行流式读取。");
-            }
-            
             aiButton.style.display = 'none';
 
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder('utf-8');
-            let buffer = '';
-
-            while(true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-                
-                buffer += decoder.decode(value, { stream: true });
-                const lines = buffer.split('\n');
-                buffer = lines.pop() || '';
-
-                for (const line of lines) {
-                    if (line.trim() === '' || !line.startsWith('data:')) continue;
-
-                    const data = line.substring(5).trim();
-                    if (data === '[DONE]') break;
-
-                    const parsed = JSON.parse(data);
-                    const content = parsed.choices?.[0]?.delta?.content;
-                    if (content) {
-                        explanationContainer.textContent += content;
-                    }
+            // Use a modern for-await-of loop to handle the stream.
+            for await (const chunk of stream) {
+                const content = chunk.choices[0]?.delta?.content || "";
+                if (content) {
+                    explanationContainer.textContent += content;
                 }
             }
 
@@ -318,7 +287,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         } catch (error) {
             console.error('AI Explanation Error:', error);
-            alert(`😥 抱歉，AI讲解失败了。\n\n错误信息: ${String(error.message)}\n\n这可能是由于：\n1. 网络超时或连接中断。\n2. API Key不正确或账户余额不足。\n3. DeepSeek服务器暂时无法访问。\n\n请检查后重试。`);
+            // The library provides detailed error objects.
+            const errorMessage = error.message || String(error);
+            alert(`😥 抱歉，AI讲解失败了。\n\n错误信息: ${errorMessage}\n\n这可能是由于：\n1. 网络连接问题。\n2. API Key不正确或账户余额不足。\n3. DeepSeek服务器暂时无法访问。\n\n请检查后重试。`);
             
             if (aiButton) {
                 aiButton.style.display = 'inline-block';
